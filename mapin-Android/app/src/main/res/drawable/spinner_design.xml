@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    //最初に下地に色をつける
+    <item>
+        <shape>
+            <solid android:color="#9BAAAA"/>
+
+            //四隅の角を丸くする
+            <corners
+                android:topRightRadius="5dp"
+                android:bottomRightRadius="5dp"
+                android:bottomLeftRadius="5dp"
+                android:topLeftRadius="5dp"/>
+
+            　　　　　//枠線をつける
+            <stroke android:width="2dp"
+                android:color="#ccc"/>
+        </shape>
+    </item>
+
+    //余白をつけたのを重ねる
+    <item android:right="40dp"
+        android:top="1dp"
+        android:left="1dp"
+        android:bottom="1dp">
+        <shape>
+            <solid android:color="#fff"/>
+
+            　　　　//左にだけ角丸をつけておく
+            <corners
+                android:bottomLeftRadius="4dp"
+                android:topLeftRadius="4dp"/>
+        </shape>
+
+
+    </item>
+
+</layer-list>
+
