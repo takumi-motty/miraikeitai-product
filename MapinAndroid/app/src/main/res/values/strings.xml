@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MapinAndroid</string>
     <string name="application_name">まっぴん</string>
-    <string name="file_name">ファイル</string>
+    <string name="file_name">設置ファイル</string>
     <string name="info_name">情報</string>
     <string name="location">住所</string>
     <string name="business_time">営業時間</string>
