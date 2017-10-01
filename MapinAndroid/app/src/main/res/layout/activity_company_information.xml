@@ -8,21 +8,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/view5"
-        android:id="@+id/relativeLayout2">
+        android:layout_above="@+id/relativeLayout"
+        android:background="@color/gray">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/relativeLayout5"
             android:layout_width="150dp"
             android:layout_height="120dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/relativeLayout3">
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/selected_photo"
@@ -30,7 +25,86 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitCenter" />
 
-        </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/relativeLayout5"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/relativeLayout5"
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:weightSum="1"
+            android:id="@+id/linearLayout">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/store_name"
+                android:textSize="30sp"
+                android:layout_weight="0.17" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:layout_alignLeft="@+id/textView11"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignStart="@+id/textView11"
+                android:layout_below="@+id/textView11"
+                android:text="@string/category" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:layout_alignLeft="@+id/textView9"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignStart="@+id/textView9"
+                android:layout_below="@+id/textView9"
+                android:text="@string/company_name" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:layout_alignLeft="@+id/textView20"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignStart="@+id/textView20"
+                android:layout_below="@+id/textView20"
+                android:text="@string/update_date" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/Button01"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/Button03"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:text="@string/detail_information"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/Button03"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/linearLayout"
+            android:text="@string/file_name"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -39,31 +113,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/relativeLayout"
-        android:layout_below="@+id/relativeLayout2"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/view5">
 
         <ListView
-            android:id="@+id/listView1"
+            android:id="@+id/listView01"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:visibility="visible"/>
+
+        <ListView
+            android:id="@+id/listView02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"/>
+
 
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/store_name"
-        android:textSize="30sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="153dp"
-        android:layout_marginStart="153dp" />
 
     <View
         android:id="@+id/view5"
@@ -73,49 +143,6 @@
         android:background="@color/black"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView9"
-        android:text="@string/company_name"
-        android:layout_alignLeft="@+id/textView9"
-        android:layout_alignStart="@+id/textView9" />
-
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView11"
-        android:layout_alignStart="@+id/textView11"
-        android:layout_below="@+id/textView11"
-        android:text="@string/category"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView20"
-        android:text="@string/update_date"
-        android:layout_alignLeft="@+id/textView20"
-        android:layout_alignStart="@+id/textView20"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/relativeLayout"
-        android:layout_alignParentStart="true"
-        android:text="@string/detail_information"
-        android:layout_alignParentEnd="true" />
-
 
 
 </RelativeLayout>

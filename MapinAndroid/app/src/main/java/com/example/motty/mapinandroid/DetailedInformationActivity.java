@@ -1,18 +1,27 @@
 package com.example.motty.mapinandroid;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-//店舗詳細情報画面
+//店舗詳細情報画面 ※現在は未使用
 public class DetailedInformationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+        if ( actionBar != null ) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setLogo(R.drawable.splash);
+        }
+
         setContentView(R.layout.activity_detailed_information);
 
         Intent intent = getIntent();

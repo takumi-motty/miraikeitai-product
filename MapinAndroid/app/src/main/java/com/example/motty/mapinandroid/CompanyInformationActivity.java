@@ -2,6 +2,7 @@ package com.example.motty.mapinandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,11 +13,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 //ファイル情報画面&企業情報画面
-public class CompanyInformationActivity extends AppCompatActivity implements View.OnClickListener{
+public class CompanyInformationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setLogo(R.drawable.splash);
+        }
+
         setContentView(R.layout.activity_company_information);
 
         Intent intent = getIntent();
@@ -30,17 +39,72 @@ public class CompanyInformationActivity extends AppCompatActivity implements Vie
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_list_item_1);
-        for(int i = 1; i<6; i++) {
+        for (int i = 1; i < 6; i++) {
             adapter.add("設置ファイル" + i);
         }
 
-        ListView listView1 = (ListView) findViewById(R.id.listView1);
+        final ListView listView1 = (ListView) findViewById(R.id.listView01);
         listView1.setAdapter(adapter);
 
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(this);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
+                this, android.R.layout.simple_list_item_1);
+        for (int i = 1; i < 6; i++) {
+            adapter2.add("店舗情報" + i);
+        }
 
+        final ListView listView2 = (ListView) findViewById(R.id.listView02);
+        listView2.setAdapter(adapter2);
+
+        Button btn1 = (Button) this.findViewById(R.id.Button01);
+        final Button btn3 = (Button) this.findViewById(R.id.Button03);
+
+        // ファイルを押した時の動作
+        btn3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Button btn1 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button01);
+                Button btn3 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button03);
+                ListView listView1 = (ListView) CompanyInformationActivity.this.findViewById(R.id.listView01);
+                ListView listView2 = (ListView) CompanyInformationActivity.this.findViewById(R.id.listView02);
+
+
+                if (btn1.getVisibility() != View.VISIBLE) {
+                    btn1.setVisibility(View.VISIBLE);
+                    btn3.setVisibility(View.INVISIBLE);
+                    listView1.setVisibility(View.VISIBLE);
+                    listView2.setVisibility(View.INVISIBLE);
+
+                } else {
+                    btn1.setVisibility(View.INVISIBLE);
+                    btn3.setVisibility(View.VISIBLE);
+                    listView2.setVisibility(View.INVISIBLE);
+                    listView1.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        // 企業情報を押した時の動作
+        btn1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Button btn1 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button01);
+                Button btn3 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button03);
+
+                if (btn3.getVisibility() != View.VISIBLE) {
+                    btn3.setVisibility(View.VISIBLE);
+                    btn1.setVisibility(View.INVISIBLE);
+                    listView2.setVisibility(View.VISIBLE);
+                    listView1.setVisibility(View.INVISIBLE);
+
+                } else {
+
+                    btn3.setVisibility(View.INVISIBLE);
+                    btn1.setVisibility(View.VISIBLE);
+                    listView1.setVisibility(View.VISIBLE);
+                    listView2.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
+
 
 
     @Override
@@ -65,12 +129,4 @@ public class CompanyInformationActivity extends AppCompatActivity implements Vie
         }
     }
 
-
-    // ボタンをタップした時の動作
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(this, DetailedInformationActivity.class);
-        startActivity(intent);
-
-    }
 }

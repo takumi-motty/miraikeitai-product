@@ -2,10 +2,12 @@ package com.example.motty.mapinandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -33,9 +35,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_top);
 
+        //setContentView(R.layout.activity_top);
         //requestWindowFeature(Window.FEATURE_LEFT_ICON);
+
+        // メニューバーにロゴを表示
+        ActionBar actionBar = getSupportActionBar();
+        if ( actionBar != null ) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setLogo(R.drawable.splash);
+        }
+
+
+        // EditTextで自動的にキーボードが出るのを防ぐ処理
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         setContentView(R.layout.activity_main);
 
