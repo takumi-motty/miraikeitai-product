@@ -11,9 +11,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 
 //ファイル情報画面&企業情報画面
 public class CompanyInformationActivity extends AppCompatActivity {
+
+    private ArrayList<String> item_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +38,71 @@ public class CompanyInformationActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         //String selectedText = intent.getStringExtra("Text");
-        int selectedPhoto = intent.getIntExtra("Photo", 0);
+//        int selectedPhoto = intent.getIntExtra("Photo", 0);
+
+        //ArrayList<Company> companies_information = (ArrayList<Company>) intent.getSerializableExtra("Companies");
+
+
+        //int position = intent.getIntExtra("position", 0);
+        String shop_Name = intent.getStringExtra("ShopName");
+        String company_Name = intent.getStringExtra("CompanyName");
+        String category = intent.getStringExtra("Category");
+        String updated_at = intent.getStringExtra("Updated_at");
+        String imageUrl = intent.getStringExtra("ImageUrl");
+        String postalCode = intent.getStringExtra("PostalCode");
+        String address = intent.getStringExtra("Address");
+        String tel = intent.getStringExtra("Tel");
+        String homepage = intent.getStringExtra("Homepage");
+        String hours_Begin = intent.getStringExtra("hoursBegin");
+        String hours_End = intent.getStringExtra("hoursEnd");
+
+
+        //String s = companies_information.get(0).getShop_name();
+
+
+
+
+        TextView shopNameText = (TextView) findViewById(R.id.textShopName);
+        shopNameText.setText(shop_Name);
+        //shopNameText.setText(companies_information.get(position).getShop_name());
+
+        TextView companyNameText = (TextView) findViewById(R.id.textCompanyName);
+        companyNameText.setText(company_Name);
+
+        TextView categoryText = (TextView) findViewById(R.id.textCategory);
+        categoryText.setText(category);
+
+        TextView updated_atText = (TextView) findViewById(R.id.textUpdated_at);
+        updated_atText.setText(updated_at);
+
+        TextView postal_codeText = (TextView) findViewById(R.id.textPostNumber);
+        postal_codeText.setText(postalCode);
+
+        TextView addressText = (TextView) findViewById(R.id.textLocation);
+        addressText.setText(address);
+
+        TextView telText = (TextView) findViewById(R.id.textPhoneNumber);
+        telText.setText(tel);
+
+        TextView homepageText = (TextView) findViewById(R.id.textURL);
+        homepageText.setText(homepage);
+
+
+        TextView hours_beginText = (TextView) findViewById(R.id.textBegin);
+        hours_beginText.setText(hours_Begin);
+
+        TextView hours_endText = (TextView) findViewById(R.id.textEnd);
+        hours_endText.setText(hours_End);
+
+
 
         /*TextView textView = (TextView) findViewById(R.id.selected_text);
         textView.setText(selectedText);*/
         ImageView imageView = (ImageView) findViewById(R.id.selected_photo);
-        imageView.setImageResource(selectedPhoto);
+        Glide.with(getApplicationContext()).load(imageUrl).into(imageView);
+        //imageView.setImageResource(selectedPhoto);
+
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_list_item_1);
@@ -44,16 +111,27 @@ public class CompanyInformationActivity extends AppCompatActivity {
         }
 
         final ListView listView1 = (ListView) findViewById(R.id.listView01);
+
+        //ファイル文字列格納用リスト
+        item_list = new ArrayList<String>();
+
+        //アダプターの作成
+        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_list_item_1,item_list);
+
+
         listView1.setAdapter(adapter);
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
-                this, android.R.layout.simple_list_item_1);
-        for (int i = 1; i < 6; i++) {
-            adapter2.add("店舗情報" + i);
-        }
+//        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
+//                this, android.R.layout.simple_list_item_1);
+//        for (int i = 1; i < 6; i++) {
+//            adapter2.add("店舗情報" + i);
+//        }
 
-        final ListView listView2 = (ListView) findViewById(R.id.listView02);
-        listView2.setAdapter(adapter2);
+        //final ListView listView2 = (ListView) findViewById(R.id.listView02);
+        //listView2.setAdapter(adapter2);
+
+        final RelativeLayout detail = (RelativeLayout) findViewById(R.id.companyDetailInformation);
 
         Button btn1 = (Button) this.findViewById(R.id.Button01);
         final Button btn3 = (Button) this.findViewById(R.id.Button03);
@@ -64,20 +142,23 @@ public class CompanyInformationActivity extends AppCompatActivity {
                 Button btn1 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button01);
                 Button btn3 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button03);
                 ListView listView1 = (ListView) CompanyInformationActivity.this.findViewById(R.id.listView01);
-                ListView listView2 = (ListView) CompanyInformationActivity.this.findViewById(R.id.listView02);
+                //ListView listView2 = (ListView) CompanyInformationActivity.this.findViewById(R.id.listView02);
+                RelativeLayout detail = (RelativeLayout) findViewById(R.id.companyDetailInformation);
 
 
                 if (btn1.getVisibility() != View.VISIBLE) {
                     btn1.setVisibility(View.VISIBLE);
                     btn3.setVisibility(View.INVISIBLE);
                     listView1.setVisibility(View.VISIBLE);
-                    listView2.setVisibility(View.INVISIBLE);
+                    //listView2.setVisibility(View.INVISIBLE);
+                    detail.setVisibility(View.INVISIBLE);
 
                 } else {
                     btn1.setVisibility(View.INVISIBLE);
                     btn3.setVisibility(View.VISIBLE);
-                    listView2.setVisibility(View.INVISIBLE);
+                    //listView2.setVisibility(View.INVISIBLE);
                     listView1.setVisibility(View.INVISIBLE);
+                    detail.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -91,15 +172,17 @@ public class CompanyInformationActivity extends AppCompatActivity {
                 if (btn3.getVisibility() != View.VISIBLE) {
                     btn3.setVisibility(View.VISIBLE);
                     btn1.setVisibility(View.INVISIBLE);
-                    listView2.setVisibility(View.VISIBLE);
+                    //listView2.setVisibility(View.VISIBLE);
                     listView1.setVisibility(View.INVISIBLE);
+                    detail.setVisibility(View.VISIBLE);
 
                 } else {
 
                     btn3.setVisibility(View.INVISIBLE);
                     btn1.setVisibility(View.VISIBLE);
                     listView1.setVisibility(View.VISIBLE);
-                    listView2.setVisibility(View.INVISIBLE);
+                    //listView2.setVisibility(View.INVISIBLE);
+                    detail.setVisibility(View.INVISIBLE);
                 }
             }
         });

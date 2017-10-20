@@ -1,8 +1,10 @@
 package com.example.motty.mapinandroid.model;
 
 
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Company {
+public class Company implements Serializable{
     private int company_id;
     private String company_name;
     private int shop_id;
@@ -21,6 +23,10 @@ public class Company {
     private String created_at;
     private String updated_at;
     private String file_type;
+
+
+    ArrayList<Object> files = new ArrayList<>();
+    ArrayList<Object> shops = new ArrayList<>();
 
     public Company(int company_id, String company_name,
                      int shop_id, String shop_name, String shop_image, String postal_code, String address, String tel, String hours_begin, String hours_end, String category, String homepage,
@@ -44,6 +50,7 @@ public class Company {
         this.updated_at = updated_at;
         this.file_type = file_type;
     }
+
 
     public int getCompany_id() {
         return company_id;
@@ -115,6 +122,14 @@ public class Company {
 
     public String getFile_type() {
         return file_type;
+    }
+
+    public ArrayList<Object> getFiles() {
+        return files;
+    }
+
+    public ArrayList<Object> getShops() {
+        return shops;
     }
 
     @Override

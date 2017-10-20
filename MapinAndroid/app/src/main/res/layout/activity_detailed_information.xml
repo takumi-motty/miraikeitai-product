@@ -55,18 +55,18 @@
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/textCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView11"
+                android:layout_alignLeft="@+id/textCompanyName"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignStart="@+id/textView11"
-                android:layout_below="@+id/textView11"
+                android:layout_alignStart="@+id/textCompanyName"
+                android:layout_below="@+id/textCompanyName"
                 android:text="@string/category" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/textCompanyName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/textView9"
@@ -77,14 +77,14 @@
                 android:text="@string/company_name" />
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/textUpdated_at"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView20"
+                android:layout_alignLeft="@+id/textCategory"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignStart="@+id/textView20"
-                android:layout_below="@+id/textView20"
+                android:layout_alignStart="@+id/textCategory"
+                android:layout_below="@+id/textCategory"
                 android:text="@string/update_date" />
         </LinearLayout>
 
