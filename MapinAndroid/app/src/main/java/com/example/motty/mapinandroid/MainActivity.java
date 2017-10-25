@@ -1,5 +1,6 @@
 package com.example.motty.mapinandroid;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -13,6 +14,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+
+import android.util.Log;
+import android.os.AsyncTask;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.example.motty.mapinandroid.adapter.TopListAdapter;
 import com.example.motty.mapinandroid.model.Company;
 
@@ -24,6 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 //トップ画面
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -45,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             R.drawable.library,
             R.drawable.syokudou
     };
+
+    //pullToRefresh
+    protected PullToRefreshListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.splash);
 
+        //pullToRefresh
+        listView = (PullToRefreshListView) findViewById(R.id.listView);
+        adapter = new ListViewAdapter(this.getApplicationContext(), R.layout.list, scenes, photos);
+        listView.setAdapter(adapter);
+        //listView.setOnItemClickListener(this);
         //ListView listView = (ListView) findViewById(R.id.list_view);
 
         //adapter = new ListViewAdapter(this.getApplicationContext(), R.layout.list, scenes, photos);
@@ -85,7 +100,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //listView.setOnItemClickListener(this);
         getData();
+    }
 
+    // リスト更新
+    private class LoadTask extends AsyncTask<Void, Void, String[]> {
+        @Override
+        protected String[] doInBackground(Void... params) {
+            // データ取得処理
+            return new String[0];
+        }
+
+        @Override
+        protected void onPostExecute(String[] strings) {
+            Log.d("onPostExecute", "更新完了");
+            listView.onRefreshComplete();
+            super.onPostExecute(strings);
+        }
     }
 
     // リストをタップした時の動作

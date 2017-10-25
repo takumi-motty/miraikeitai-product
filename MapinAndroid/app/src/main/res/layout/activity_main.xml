@@ -40,16 +40,15 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="51dp">
-
-        <ListView
-            android:id="@+id/list_view"
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:divider="@android:color/darker_gray"
             android:dividerHeight="2dp"
+            android:id="@+id/listView"
             android:layout_below="@+id/view5"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-
         <View
             android:id="@+id/view5"
             android:layout_width="match_parent"
@@ -59,5 +58,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
     </RelativeLayout>
+
+
 
 </RelativeLayout>
