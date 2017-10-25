@@ -2,6 +2,7 @@ package com.example.motty.mapinandroid;
 
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,15 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
-
-import android.util.Log;
-import android.os.AsyncTask;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.example.motty.mapinandroid.adapter.TopListAdapter;
 import com.example.motty.mapinandroid.model.Company;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 //    private ArrayAdapter<Company> adapter;
     private TopListAdapter topListAdapter;
+    private TopListAdapter refreshAdapter;
+
     final ArrayList<Company> companies = new ArrayList<>();
 //    ImageView imageView = (ImageView) findViewById(R.id.imageViewShop);
 
@@ -66,12 +64,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
 
 //        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-        topListAdapter = new TopListAdapter(getApplicationContext());
+        //topListAdapter = new TopListAdapter(getApplicationContext());
 
-        final ListView listView = (ListView) findViewById(R.id.list_view);
+        //final ListView listView = (ListView) findViewById(R.id.list_view);
 
-        listView.setAdapter(topListAdapter);
-        listView.setOnItemClickListener(this);
+//        listView.setAdapter(topListAdapter);
+//        listView.setOnItemClickListener(this);
 //        ArrayList<String> data = new ArrayList<>();
 //        for(int i = 0; i < companies.size(); i++){
 //            data.add(companies.get(i).getShop_name());
@@ -85,9 +83,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //pullToRefresh
         listView = (PullToRefreshListView) findViewById(R.id.listView);
-        adapter = new ListViewAdapter(this.getApplicationContext(), R.layout.list, scenes, photos);
-        listView.setAdapter(adapter);
-        //listView.setOnItemClickListener(this);
+//        refreshAdapter = new TopListAdapter(this.getApplicationContext(), R.layout.list, scenes, photos);
+        refreshAdapter = new TopListAdapter(this.getApplicationContext());
+        listView.setAdapter(refreshAdapter);
+        listView.setOnItemClickListener(this);
         //ListView listView = (ListView) findViewById(R.id.list_view);
 
         //adapter = new ListViewAdapter(this.getApplicationContext(), R.layout.list, scenes, photos);
@@ -141,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        intent.putExtra("Text", selectedText);
 //        intent.putExtra("Photo", selectedPhoto);
         //intent.putExtra("Companies", companies.get(position));
+        position = position-1;
         intent.putExtra("position", position);
         intent.putExtra("ShopName", companies.get(position).getShop_name());
         intent.putExtra("CompanyName", companies.get(position).getCompany_name());
@@ -185,6 +185,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //    @Override
 //    protected void onResume() {
 //        super.onResume();
+//        for(int i = 0; i<companies.size(); i++){
+//            companies.remove(i);
+//        }
 //        getData();
 //    }
 
@@ -231,11 +234,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     //ダミーデータ設置
                     companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "スーパーマーケット", "", 1, "", "", "", "2017/10/08", ""));
+                    companies.add(new Company(1, "FUN", 1, "セブン-イレブン大井店", "https://i.imgur.com/Rpphzc4.png", "140-0014", "東京都品川区 大井５－２－１１", "03-3771-0216", "00:00:00", "", "コンビニ", "http://www.sej.co.jp/", 1, "", "", "", "2017/10/08", ""));
                     companies.add(new Company(1, "7&iホールディングス", 1, "イトーヨーカドー大井町店", "https://i.imgur.com/4L5wfqL.png", "140-0014", "東京都品川区大井１丁目３−６", "03-3777-6611", "10:00:00", "22:00:00", "スーパーマーケット", "http://www.itoyokado.co.jp/", 1, "", "", "", "2017/10/15", ""));
                     companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
                     companies.add(new Company(1, "FUN", 1, "ミライストア", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "スーパーマーケット", "", 1, "", "", "", "2017/12/31", ""));
-//                    companies.add(new Company(1, "ラッキーピエロ", 1, "ラッキーピエロ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/11/25", ""));
-//                    companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
+                    //companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
 
 
                     Log.d("MainActivity", companies.toString());
@@ -249,12 +252,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Log.d("MainActivity", t.getMessage());
 
                     //ダミーデータ設置
-//                    companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "小売店", "", 1, "", "", "", "2017/10/08", ""));
-//                    companies.add(new Company(1, "7&iホールディングス", 1, "イトーヨーカドー大井町店", "https://i.imgur.com/4L5wfqL.png", "140-0014", "東京都品川区大井１丁目３−６", "03-3777-6611", "10:00:00", "22:00:00", "スーパーマーケット", "http://www.itoyokado.co.jp/", 1, "", "", "", "2017/10/15", ""));
-//                    companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
-//                    companies.add(new Company(1, "FUN", 1, "ミライバーガー", "", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/12/31", ""));
-//                    companies.add(new Company(1, "ラッキーピエロ", 1, "ラッキーピエロ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/11/25", ""));
-//                    companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
+                    companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "小売店", "", 1, "", "", "", "2017/10/08", ""));
+                    companies.add(new Company(1, "FUN", 1, "セブン-イレブン大井店", "https://i.imgur.com/Rpphzc4.png", "140-0014", "東京都品川区 大井５－２－１１", "03-3771-0216", "00:00:00", "", "コンビニ", "http://www.sej.co.jp/", 1, "", "", "", "2017/10/08", ""));
+                    companies.add(new Company(1, "7&iホールディングス", 1, "イトーヨーカドー大井町店", "https://i.imgur.com/4L5wfqL.png", "140-0014", "東京都品川区大井１丁目３−６", "03-3777-6611", "10:00:00", "22:00:00", "スーパーマーケット", "http://www.itoyokado.co.jp/", 1, "", "", "", "2017/10/15", ""));
+                    companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
+                    //companies.add(new Company(1, "FUN", 1, "ミライバーガー", "", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/12/31", ""));
+                    //companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
 
                     Log.d("MainActivity", companies.toString());
 
@@ -272,8 +275,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         for (Company company : companies) {
 //            adapter.add(company);
         }
-        topListAdapter.setDatas(companies);
-        topListAdapter.notifyDataSetChanged();
+//        topListAdapter.setDatas(companies);
+//        topListAdapter.notifyDataSetChanged();
+        refreshAdapter.setDatas(companies);
+        refreshAdapter.notifyDataSetChanged();
     }
 
 }
