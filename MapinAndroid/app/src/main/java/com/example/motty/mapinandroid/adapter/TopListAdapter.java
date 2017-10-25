@@ -12,8 +12,9 @@ import java.util.ArrayList;
 
 public class TopListAdapter extends BaseAdapter {
 
-    private ArrayList<TopListView> companies;
+//    private ArrayList<TopListView> companies;
 //    private ArrayList<Company> topCompany;
+    private ArrayList<Company> companies;
     private Context context;
 
     public TopListAdapter(Context context) {
@@ -39,8 +40,13 @@ public class TopListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TopListView view = (TopListView) ((convertView == null) ? companies.get(position) : convertView);
-        view.setImageView();
+        if (convertView == null || !(convertView instanceof TopListView)) {
+            TopListView view = new TopListView(context);
+            view.setCompany(companies.get(position));
+            return view;
+        } else {
+            return convertView;
+        }
 
 //        if (convertView == null) {
 //            convertView = layoutInflater.inflate(R.layout.list_top_adapter, null);
@@ -52,17 +58,11 @@ public class TopListAdapter extends BaseAdapter {
        // Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(view.imageView);
 
 //        imageView.setImageResource(R.drawable.fun);
-        return view;
 
     }
 
 
     public void setDatas(ArrayList<Company> companies) {
-        for (Company company : companies) {
-            TopListView view = new TopListView(context);
-            //Glide.with(context).load(company.getShop_image()).into(view.imageView);
-            view.setCompany(company);
-            this.companies.add(view);
-        }
+        this.companies = companies;
     }
 }

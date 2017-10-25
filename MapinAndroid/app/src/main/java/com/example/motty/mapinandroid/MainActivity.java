@@ -230,12 +230,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     //companies.addAll(response.body());
 
                     //ダミーデータ設置
-                    companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "小売店", "", 1, "", "", "", "2017/10/08", ""));
+                    companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "スーパーマーケット", "", 1, "", "", "", "2017/10/08", ""));
                     companies.add(new Company(1, "7&iホールディングス", 1, "イトーヨーカドー大井町店", "https://i.imgur.com/4L5wfqL.png", "140-0014", "東京都品川区大井１丁目３−６", "03-3777-6611", "10:00:00", "22:00:00", "スーパーマーケット", "http://www.itoyokado.co.jp/", 1, "", "", "", "2017/10/15", ""));
-                    companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
-                    companies.add(new Company(1, "FUN", 1, "ミライバーガー", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/12/31", ""));
-                    companies.add(new Company(1, "ラッキーピエロ", 1, "ラッキーピエロ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/11/25", ""));
-                    companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
+                    companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
+                    companies.add(new Company(1, "FUN", 1, "ミライストア", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "スーパーマーケット", "", 1, "", "", "", "2017/12/31", ""));
+//                    companies.add(new Company(1, "ラッキーピエロ", 1, "ラッキーピエロ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/11/25", ""));
+//                    companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
 
 
                     Log.d("MainActivity", companies.toString());
@@ -249,12 +249,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Log.d("MainActivity", t.getMessage());
 
                     //ダミーデータ設置
-                    companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "小売店", "", 1, "", "", "", "2017/10/08", ""));
-                    companies.add(new Company(1, "7&iホールディングス", 1, "イトーヨーカドー大井町店", "https://i.imgur.com/4L5wfqL.png", "140-0014", "東京都品川区大井１丁目３−６", "03-3777-6611", "10:00:00", "22:00:00", "スーパーマーケット", "http://www.itoyokado.co.jp/", 1, "", "", "", "2017/10/15", ""));
-                    companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
-                    //companies.add(new Company(1, "FUN", 1, "ミライバーガー", "", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/12/31", ""));
-                    companies.add(new Company(1, "ラッキーピエロ", 1, "ラッキーピエロ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/11/25", ""));
-                    companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
+//                    companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "小売店", "", 1, "", "", "", "2017/10/08", ""));
+//                    companies.add(new Company(1, "7&iホールディングス", 1, "イトーヨーカドー大井町店", "https://i.imgur.com/4L5wfqL.png", "140-0014", "東京都品川区大井１丁目３−６", "03-3777-6611", "10:00:00", "22:00:00", "スーパーマーケット", "http://www.itoyokado.co.jp/", 1, "", "", "", "2017/10/15", ""));
+//                    companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
+//                    companies.add(new Company(1, "FUN", 1, "ミライバーガー", "", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/12/31", ""));
+//                    companies.add(new Company(1, "ラッキーピエロ", 1, "ラッキーピエロ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/11/25", ""));
+//                    companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
 
                     Log.d("MainActivity", companies.toString());
 
