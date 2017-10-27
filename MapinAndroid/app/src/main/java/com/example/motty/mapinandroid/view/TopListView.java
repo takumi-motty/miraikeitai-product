@@ -1,9 +1,6 @@
 package com.example.motty.mapinandroid.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -11,16 +8,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.motty.mapinandroid.R;
 import com.example.motty.mapinandroid.model.Company;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class TopListView extends LinearLayout {
-    private ImageView imageView;
+    private Context context;
+    public ImageView imageView;
     private TextView textViewShopName;
     private TextView textViewCompanyName;
     private TextView textViewCategory;
@@ -39,6 +36,7 @@ public class TopListView extends LinearLayout {
 
     public TopListView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
         LayoutInflater.from(context).inflate(R.layout.list_top_adapter, this);
         textViewShopName = (TextView) findViewById(R.id.shopNameText);
         textViewCompanyName = (TextView) findViewById(R.id.companyNameText);
@@ -47,12 +45,22 @@ public class TopListView extends LinearLayout {
         imageView = (ImageView) findViewById(R.id.imageViewShop);
     }
 
+    public void setImageView() {
+        //imageView.setBackgroundColor(Color.GRAY);
+//        imageView.setImageResource(R.drawable.fun);
+//        Glide.with(context)
+//                .load("https://i.imgur.com/8fkVe2B.jpg")
+//                .into(imageView);
+    }
+
 
     public void setCompany(final Company company) {
         textViewShopName.setText(company.getShop_name());
         textViewCompanyName.setText(company.getCompany_name());
         textViewCategory.setText(company.getCategory());
         textViewUpdate_at.setText(company.getUpdated_at());
+        Glide.with(context).load(company.getShop_image()).into(imageView);
+
 
 //        String url = company.getShop_image();
 //
@@ -96,33 +104,33 @@ public class TopListView extends LinearLayout {
 
 
 
-        class ImageGetTask extends AsyncTask<String,Void,Bitmap> {
-            private ImageView image;
-
-            public ImageGetTask(ImageView _image) {
-                image = _image;
-            }
-            @Override
-            protected Bitmap doInBackground(String... params) {
-                Bitmap image;
-                try {
-                    URL imageUrl = new URL(company.getShop_image());
-                    InputStream imageIs;
-                    imageIs = imageUrl.openStream();
-                    image = BitmapFactory.decodeStream(imageIs);
-                    return image;
-                } catch (MalformedURLException e) {
-                    return null;
-                } catch (IOException e) {
-                    return null;
-                }
-            }
-            @Override
-            protected void onPostExecute(Bitmap result) {
-                // 取得した画像をImageViewに設定します。
-                imageView.setImageBitmap(result);
-            }
-        }
+//        class ImageGetTask extends AsyncTask<String,Void,Bitmap> {
+//            private ImageView image;
+//
+//            public ImageGetTask(ImageView _image) {
+//                image = _image;
+//            }
+//            @Override
+//            protected Bitmap doInBackground(String... params) {
+//                Bitmap image;
+//                try {
+//                    URL imageUrl = new URL(company.getShop_image());
+//                    InputStream imageIs;
+//                    imageIs = imageUrl.openStream();
+//                    image = BitmapFactory.decodeStream(imageIs);
+//                    return image;
+//                } catch (MalformedURLException e) {
+//                    return null;
+//                } catch (IOException e) {
+//                    return null;
+//                }
+//            }
+//            @Override
+//            protected void onPostExecute(Bitmap result) {
+//                // 取得した画像をImageViewに設定します。
+//                imageView.setImageBitmap(result);
+//            }
+//        }
 
     }
 }

@@ -12,13 +12,16 @@ import java.util.ArrayList;
 
 public class TopListAdapter extends BaseAdapter {
 
-    private ArrayList<TopListView> companies;
+//    private ArrayList<TopListView> companies;
+//    private ArrayList<Company> topCompany;
+    private ArrayList<Company> companies;
     private Context context;
 
     public TopListAdapter(Context context) {
         this.context = context;
         this.companies = new ArrayList<>();
     }
+
 
     @Override
     public int getCount() {
@@ -37,18 +40,29 @@ public class TopListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            return companies.get(position);
+        if (convertView == null || !(convertView instanceof TopListView)) {
+            TopListView view = new TopListView(context);
+            view.setCompany(companies.get(position));
+            return view;
         } else {
             return convertView;
         }
+
+//        if (convertView == null) {
+//            convertView = layoutInflater.inflate(R.layout.list_top_adapter, null);
+//        }
+
+
+        //Glide.with(context).load(topCompany.get(position).getShop_image()).into(view.imageView);
+       // Glide.with(context).load("http://i.imgur.com/DvpvklR.png").into(view.imageView);
+       // Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(view.imageView);
+
+//        imageView.setImageResource(R.drawable.fun);
+
     }
 
+
     public void setDatas(ArrayList<Company> companies) {
-        for (Company company : companies) {
-            TopListView view = new TopListView(context);
-            view.setCompany(company);
-            this.companies.add(view);
-        }
+        this.companies = companies;
     }
 }
