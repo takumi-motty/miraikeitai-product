@@ -41,5 +41,6 @@
         <item>ファイル形式</item>
 
     </string-array>
+    <string name="title_activity_content_file">ContentFileActivity</string>
 
 </resources>

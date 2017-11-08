@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,7 +20,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 //ファイル情報画面&企業情報画面
-public class CompanyInformationActivity extends AppCompatActivity {
+public class CompanyInformationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ArrayList<String> item_list;
 
@@ -121,6 +122,7 @@ public class CompanyInformationActivity extends AppCompatActivity {
 
 
         listView1.setAdapter(adapter);
+        listView1.setOnItemClickListener(this);
 
 //        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
 //                this, android.R.layout.simple_list_item_1);
@@ -210,6 +212,16 @@ public class CompanyInformationActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View v,
+                            int position, long id) {
+
+        Intent intent = new Intent(
+                this.getApplicationContext(), ContentFileActivity.class);
+        startActivity(intent);
+
     }
 
 }

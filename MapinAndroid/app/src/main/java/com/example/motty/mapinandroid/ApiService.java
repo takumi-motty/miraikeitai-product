@@ -1,6 +1,7 @@
 package com.example.motty.mapinandroid;
 
 import com.example.motty.mapinandroid.model.Company;
+import com.example.motty.mapinandroid.model.MapinResponse;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ApiService {
     //Call<List<ContactsContract.Contacts.Data>> getDatas();
     Call<List<Company>> getDatas();
 
+    @GET("wsgi")
+    Call<MapinResponse> getMapinResponse();
 }

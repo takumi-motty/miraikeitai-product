@@ -19,16 +19,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-
         <activity android:name=".CompanyInformationActivity" />
         <activity android:name=".InquiryActivity" />
         <activity android:name=".ConfigurationActivity" />
-        <activity android:name=".DetailedInformationActivity"></activity>
+        <activity android:name=".DetailedInformationActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="4030500" />
 
+        <activity
+            android:name=".ContentFileActivity"
+            android:label="@string/title_activity_content_file"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

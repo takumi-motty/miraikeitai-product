@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.example.motty.mapinandroid.model.Company;
+import com.example.motty.mapinandroid.model.Shop;
 import com.example.motty.mapinandroid.view.TopListView;
 
 import java.util.ArrayList;
@@ -14,8 +15,11 @@ public class TopListAdapter extends BaseAdapter {
 
 //    private ArrayList<TopListView> companies;
 //    private ArrayList<Company> topCompany;
+    private ArrayList<Shop> shops;
+    private Company company;
     private ArrayList<Company> companies;
     private Context context;
+
 
     public TopListAdapter(Context context) {
         this.context = context;
@@ -47,18 +51,6 @@ public class TopListAdapter extends BaseAdapter {
         } else {
             return convertView;
         }
-
-//        if (convertView == null) {
-//            convertView = layoutInflater.inflate(R.layout.list_top_adapter, null);
-//        }
-
-
-        //Glide.with(context).load(topCompany.get(position).getShop_image()).into(view.imageView);
-       // Glide.with(context).load("http://i.imgur.com/DvpvklR.png").into(view.imageView);
-       // Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(view.imageView);
-
-//        imageView.setImageResource(R.drawable.fun);
-
     }
 
 

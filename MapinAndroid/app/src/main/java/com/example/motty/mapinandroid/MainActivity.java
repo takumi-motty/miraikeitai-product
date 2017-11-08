@@ -15,16 +15,18 @@ import android.widget.AdapterView;
 
 import com.example.motty.mapinandroid.adapter.TopListAdapter;
 import com.example.motty.mapinandroid.model.Company;
+import com.example.motty.mapinandroid.model.MapinResponse;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+//import com.example.motty.mapinandroid.model.File;
 
 
 //トップ画面
@@ -37,17 +39,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     final ArrayList<Company> companies = new ArrayList<>();
 //    ImageView imageView = (ImageView) findViewById(R.id.imageViewShop);
+    //final ArrayList<File> files = new ArrayList<>();
 
 
     //pullToRefresh
     protected PullToRefreshListView listView;
 
+    private MapinResponse mapinResponse;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //setContentView(R.layout.activity_top);
-        //requestWindowFeature(Window.FEATURE_LEFT_ICON);
 
         // メニューバーにロゴを表示
         ActionBar actionBar = getSupportActionBar();
@@ -57,27 +59,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             actionBar.setLogo(R.drawable.splash);
         }
 
-
         // EditTextで自動的にキーボードが出るのを防ぐ処理
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         setContentView(R.layout.activity_main);
-
-//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-        //topListAdapter = new TopListAdapter(getApplicationContext());
-
-        //final ListView listView = (ListView) findViewById(R.id.list_view);
-
-//        listView.setAdapter(topListAdapter);
-//        listView.setOnItemClickListener(this);
-//        ArrayList<String> data = new ArrayList<>();
-//        for(int i = 0; i < companies.size(); i++){
-//            data.add(companies.get(i).getShop_name());
-//        }
-//
-//        for(int j = 0; j<data.size(); j++) {
-//            System.out.println(data);
-//        }
 
         //getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.splash);
 
@@ -89,26 +74,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         listView.setOnItemClickListener(this);
         //ListView listView = (ListView) findViewById(R.id.list_view);
 
-        //adapter = new ListViewAdapter(this.getApplicationContext(), R.layout.list, scenes, photos);
-
-        //listView.setAdapter(adapter);
-
-
-//        Uri uri = Uri.parse(companies.get(0).getUrl());
-//        Uri.Builder builder = uri.buildUpon();
-//        AsyncTaskHttpRequest task = new AsyncTaskHttpRequest(imageView);
-//        task.execute(builder);
-
-
-//        Intent intent2 = new Intent(this.getApplicationContext(), TopListAdapter.class);
-//
-//        for(Company company : companies) {
-//
-//            intent2.putExtra("Url", companies.get(company.size()).getShop_name());
-//        }
-
         //listView.setOnItemClickListener(this);
-        getData();
+//        getData();
     }
 
     // リスト更新
@@ -133,26 +100,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         Intent intent = new Intent(this.getApplicationContext(), CompanyInformationActivity.class);
-        // clickされたpositionのtextとphotoのID
-//        String selectedText = scenes[position];
-//        int selectedPhoto = photos[position];
-        // インテントにセット
-//        intent.putExtra("Text", selectedText);
-//        intent.putExtra("Photo", selectedPhoto);
-        //intent.putExtra("Companies", companies.get(position));
-        position = position-1;
-        intent.putExtra("position", position);
-        intent.putExtra("ShopName", companies.get(position).getShop_name());
-        intent.putExtra("CompanyName", companies.get(position).getCompany_name());
-        intent.putExtra("Category", companies.get(position).getCategory());
-        intent.putExtra("Updated_at", companies.get(position).getUpdated_at());
-        intent.putExtra("ImageUrl", companies.get(position).getShop_image());
-        intent.putExtra("PostalCode", companies.get(position).getPostal_code());
-        intent.putExtra("Address", companies.get(position).getAddress());
-        intent.putExtra("Tel", companies.get(position).getTel());
-        intent.putExtra("Homepage", companies.get(position).getHomepage());
-        intent.putExtra("hoursBegin", companies.get(position).getHours_begin());
-        intent.putExtra("hoursEnd", companies.get(position).getHours_end());
+
+//        intent.putExtra("ShopName", companies.get(position).getShop_name());
+//        intent.putExtra("CompanyName", companies.get(position).getCompany_name());
+//        intent.putExtra("Category", companies.get(position).getCategory());
+//        intent.putExtra("Updated_at", companies.get(position).getUpdated_at());
+//        intent.putExtra("ImageUrl", companies.get(position).getShop_image());
+//        intent.putExtra("PostalCode", companies.get(position).getPostal_code());
+//        intent.putExtra("Address", companies.get(position).getAddress());
+//        intent.putExtra("Tel", companies.get(position).getTel());
+//        intent.putExtra("Homepage", companies.get(position).getHomepage());
+//        intent.putExtra("hoursBegin", companies.get(position).getHours_begin());
+//        intent.putExtra("hoursEnd", companies.get(position).getHours_end());
+//
+//        intent.putExtra("FileName", files.get(position).getFile_name());
+        intent.putExtra("Response", mapinResponse);
         startActivity(intent);
     }
 
@@ -182,99 +144,45 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        for(int i = 0; i<companies.size(); i++){
-//            companies.remove(i);
-//        }
-//        getData();
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
+    }
 
     private void getData() {
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://54.199.196.68/")
-                .baseUrl("http://54.238.225.122/")
+//                .baseUrl("http://54.199.196.68/")
+//                .baseUrl("http://54.238.225.122/")
+//                .baseUrl("http://http://ec2-54-199-196-68.ap-northeast-1.compute.amazonaws.com/")
+                .baseUrl("http://133.25.196.21/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         ApiService service = retrofit.create(ApiService.class);
+        final Call<MapinResponse> mapinResponseCall = service.getMapinResponse();
 
-        final Company[] company = new Company[1];
-        Call<Company> call = service.getData(1);
-        try {
-            call.enqueue(new Callback<Company>() {
-                @Override
-                public void onResponse(Call<Company> call, Response<Company> response) {
-//                    Log.d("MainActivity", response.body().toString());
-                    company[0] = response.body();
-                    Log.d("MainActivity", company[0].toString());
-                }
+        mapinResponseCall.enqueue(new Callback<MapinResponse>() {
+            @Override
+            public void onResponse(Call<MapinResponse> call, Response<MapinResponse> response) {
+                mapinResponse = response.body();
+                companies.addAll(mapinResponse.getCompanies());
+                Log.d("MainActivity", mapinResponse.toString());
+            }
 
-                @Override
-                public void onFailure(Call<Company> call, Throwable t) {
-                    Log.d("MainActivity", t.getMessage());
-                    company[0] = new Company(1, "", 1, "", "", "", "", "", "", "", "", "", 1, "", "", "", "", "");
-                    Log.d("MainActivity", company[0].toString());
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+            @Override
+            public void onFailure(Call<MapinResponse> call, Throwable t) {
+                Log.d("MainActivity", t.getMessage());
+            }
+        });
         }
-
-//        final ArrayList<Company> companies = new ArrayList<>();
-        Call<List<Company>> call2 = service.getDatas();
-        try {
-            call2.enqueue(new Callback<List<Company>>() {
-                @Override
-                public void onResponse(Call<List<Company>> call, Response<List<Company>> response) {
-//                    Log.d("MainActivity", response.body().toString());
-                    Log.d("MainActivity", "call onResponse");
-                    //companies.addAll(response.body());
-
-                    //ダミーデータ設置
-                    companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "スーパーマーケット", "", 1, "", "", "", "2017/10/08", ""));
-                    companies.add(new Company(1, "FUN", 1, "セブン-イレブン大井店", "https://i.imgur.com/Rpphzc4.png", "140-0014", "東京都品川区 大井５－２－１１", "03-3771-0216", "00:00:00", "", "コンビニ", "http://www.sej.co.jp/", 1, "", "", "", "2017/10/08", ""));
-                    companies.add(new Company(1, "7&iホールディングス", 1, "イトーヨーカドー大井町店", "https://i.imgur.com/4L5wfqL.png", "140-0014", "東京都品川区大井１丁目３−６", "03-3777-6611", "10:00:00", "22:00:00", "スーパーマーケット", "http://www.itoyokado.co.jp/", 1, "", "", "", "2017/10/15", ""));
-                    companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
-                    companies.add(new Company(1, "FUN", 1, "ミライストア", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "スーパーマーケット", "", 1, "", "", "", "2017/12/31", ""));
-                    //companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
-
-
-                    Log.d("MainActivity", companies.toString());
-
-                    updateContainer(companies);
-                }
-
-                @Override
-                public void onFailure(Call<List<Company>> call, Throwable t) {
-                    Log.d("MainActivity", "call onFailure");
-                    Log.d("MainActivity", t.getMessage());
-
-                    //ダミーデータ設置
-                    companies.add(new Company(1, "FUN", 1, "ミライマーケット", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "小売店", "", 1, "", "", "", "2017/10/08", ""));
-                    companies.add(new Company(1, "FUN", 1, "セブン-イレブン大井店", "https://i.imgur.com/Rpphzc4.png", "140-0014", "東京都品川区 大井５－２－１１", "03-3771-0216", "00:00:00", "", "コンビニ", "http://www.sej.co.jp/", 1, "", "", "", "2017/10/08", ""));
-                    companies.add(new Company(1, "7&iホールディングス", 1, "イトーヨーカドー大井町店", "https://i.imgur.com/4L5wfqL.png", "140-0014", "東京都品川区大井１丁目３−６", "03-3777-6611", "10:00:00", "22:00:00", "スーパーマーケット", "http://www.itoyokado.co.jp/", 1, "", "", "", "2017/10/15", ""));
-                    companies.add(new Company(1, "FUN", 1, "ミライコンビニ", "https://i.imgur.com/pAx1nxI.jpg", "", "", "", "", "", "コンビニ", "", 1, "", "", "", "2017/11/11", ""));
-                    //companies.add(new Company(1, "FUN", 1, "ミライバーガー", "", "", "", "", "", "", "飲食店", "", 1, "", "", "", "2017/12/31", ""));
-                    //companies.add(new Company(1, "ドン・キホーテ", 1, "ドン・キホーテ", "", "https://i.imgur.com/ihcWOPZ.png", "", "", "", "", "小売店", "", 1, "", "", "", "2018/02/14", ""));
-
-                    Log.d("MainActivity", companies.toString());
-
-                    updateContainer(companies);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void updateContainer(ArrayList<Company> companies) {
 
 //        TopListAdapter topListAdapter = new TopListAdapter(datas, getApplicationContext());
-        for (Company company : companies) {
+//        for (Company company : companies) {
 //            adapter.add(company);
-        }
+//        }
 //        topListAdapter.setDatas(companies);
 //        topListAdapter.notifyDataSetChanged();
         refreshAdapter.setDatas(companies);
