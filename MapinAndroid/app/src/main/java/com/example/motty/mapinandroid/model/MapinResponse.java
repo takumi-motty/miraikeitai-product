@@ -3,19 +3,22 @@ package com.example.motty.mapinandroid.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class MapinResponse implements Parcelable{
     private String status;
     private List<Company> companies;
+    private ArrayList<ApiShops> apiShopses;
 
-    public MapinResponse(String status, List<Company> companies) {
+    public MapinResponse(String status, List<Company> companies, ArrayList<ApiShops> apiShopses) {
         this.status = status;
         this.companies = companies;
+        this.apiShopses = apiShopses;
     }
     public MapinResponse(Parcel in){
-        this(in.readString(), in.readArrayList(Company.class.getClassLoader()));
+        this(in.readString(), in.readArrayList(Company.class.getClassLoader()), in.readArrayList(Company.class.getClassLoader()));
     }
 
     public String getStatus() {
@@ -34,11 +37,16 @@ public class MapinResponse implements Parcelable{
         this.companies = companies;
     }
 
+    public ArrayList<ApiShops> getApiShopses() { return apiShopses; }
+
+    public void setApiShopses(ArrayList<ApiShops> apiShopses) { this.apiShopses = apiShopses; }
+
     @Override
     public String toString() {
         return "MapinResponse{" +
                 "status='" + status + '\'' +
                 ", companies=" + companies +
+                ", apiShopses=" + apiShopses +
                 '}';
     }
 
@@ -51,6 +59,7 @@ public class MapinResponse implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(status);
         dest.writeList(companies);
+        dest.writeList(apiShopses);
     }
 
     public static final Parcelable.Creator<MapinResponse> CREATOR

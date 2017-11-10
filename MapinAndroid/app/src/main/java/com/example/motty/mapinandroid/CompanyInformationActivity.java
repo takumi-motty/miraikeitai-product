@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.motty.mapinandroid.model.ApiShops;
 
 import java.util.ArrayList;
 
@@ -38,62 +39,60 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         setContentView(R.layout.activity_company_information);
 
         Intent intent = getIntent();
-        //String selectedText = intent.getStringExtra("Text");
-//        int selectedPhoto = intent.getIntExtra("Photo", 0);
-
-        //ArrayList<Company> companies_information = (ArrayList<Company>) intent.getSerializableExtra("Companies");
-
-
-        //int position = intent.getIntExtra("position", 0);
-        String shop_Name = intent.getStringExtra("ShopName");
-        String company_Name = intent.getStringExtra("CompanyName");
+        String companyName = intent.getStringExtra("CompanyName");
+        String shopName = intent.getStringExtra("ShopName");
         String category = intent.getStringExtra("Category");
-        String updated_at = intent.getStringExtra("Updated_at");
-        String imageUrl = intent.getStringExtra("ImageUrl");
-        String postalCode = intent.getStringExtra("PostalCode");
+        String updatedAt = intent.getStringExtra("UpdatedAt");
+        String postalCode = intent.getStringExtra("PostNumber");
+        String bussinessHours = intent.getStringExtra("BussinessHours");
         String address = intent.getStringExtra("Address");
         String tel = intent.getStringExtra("Tel");
         String homepage = intent.getStringExtra("Homepage");
-        String hours_Begin = intent.getStringExtra("hoursBegin");
-        String hours_End = intent.getStringExtra("hoursEnd");
+        String imageUrl = intent.getStringExtra("ImageUrl");
 
+        ArrayList<ApiShops> shopsInfo = intent.getParcelableArrayListExtra("ShopsInfo");
 
         //String s = companies_information.get(0).getShop_name();
 
-
-
-
         TextView shopNameText = (TextView) findViewById(R.id.textShopName);
-        shopNameText.setText(shop_Name);
-        //shopNameText.setText(companies_information.get(position).getShop_name());
+        shopNameText.setText(shopName);
+//        shopNameText.setText(shopsInfo.get(0).getName());
 
         TextView companyNameText = (TextView) findViewById(R.id.textCompanyName);
-        companyNameText.setText(company_Name);
-
+        companyNameText.setText(companyName);
+//        companyNameText.setText(shopsInfo.get(0).getCompanyName());
+//
         TextView categoryText = (TextView) findViewById(R.id.textCategory);
         categoryText.setText(category);
+//        categoryText.setText(shopsInfo.get(0).getCategoryName());
 
         TextView updated_atText = (TextView) findViewById(R.id.textUpdated_at);
-        updated_atText.setText(updated_at);
+        updated_atText.setText(updatedAt);
+//        updated_atText.setText(shopsInfo.get(0).getUpdatedAt());
 
         TextView postal_codeText = (TextView) findViewById(R.id.textPostNumber);
         postal_codeText.setText(postalCode);
+//        postal_codeText.setText(shopsInfo.get(0).getPostalCode());
 
         TextView addressText = (TextView) findViewById(R.id.textLocation);
         addressText.setText(address);
+//        addressText.setText(shopsInfo.get(0).getAddress());
 
         TextView telText = (TextView) findViewById(R.id.textPhoneNumber);
         telText.setText(tel);
+//        telText.setText(shopsInfo.get(0).getTel());
 
         TextView homepageText = (TextView) findViewById(R.id.textURL);
         homepageText.setText(homepage);
+//        homepageText.setText(shopsInfo.get(0).getHomepage());
 
+        TextView bussiness_hoursText = (TextView) findViewById(R.id.textBussinessHours);
+        bussiness_hoursText.setText(bussinessHours);
+//        bussiness_hoursText.setText(shopsInfo.get(0).getBussinessHours());
 
-        TextView hours_beginText = (TextView) findViewById(R.id.textBegin);
-        hours_beginText.setText(hours_Begin);
+//        TextView hours_endText = (TextView) findViewById(R.id.textEnd);
+//        hours_endText.setText(hours_End);
 
-        TextView hours_endText = (TextView) findViewById(R.id.textEnd);
-        hours_endText.setText(hours_End);
 
 
 

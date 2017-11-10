@@ -8,7 +8,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.motty.mapinandroid.R;
+import com.example.motty.mapinandroid.model.ApiShops;
 import com.example.motty.mapinandroid.model.Company;
 
 public class TopListView extends LinearLayout {
@@ -39,11 +41,20 @@ public class TopListView extends LinearLayout {
     }
 
     public void setCompany(Company company) {
-//        textViewShopName.setText();
+//        textViewShopName.setText(company.);
         textViewCompanyName.setText(company.getCompanyInfo().getName());
 //        textViewCategory.setText(company.);
 //        Glide.with(context).load(company..getImageUrl()).into(imageView);
 //        textViewUpdate_at.setText(company.getUpdated_at());
+    }
+
+    public void setShops(ApiShops listShops){
+        textViewCompanyName.setText(listShops.getCompanyName());
+        textViewShopName.setText(listShops.getName());
+        textViewCategory.setText(listShops.getCategoryName());
+        Glide.with(context).load(listShops.getImageUrl()).into(imageView);
+        textViewUpdate_at.setText(listShops.getUpdatedAt());
+
     }
 }
 
