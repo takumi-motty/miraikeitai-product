@@ -3,11 +3,12 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:weightSum="1">
+
     <ImageView
+        android:id="@+id/imageView6"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:scaleType="centerInside"
-        android:src="@drawable/splash"
-        />
+        android:src="@drawable/splash" />
 </LinearLayout>
