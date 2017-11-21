@@ -46,7 +46,7 @@ public class TopListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null || !(convertView instanceof TopListView)) {
             TopListView view = new TopListView(context);
-            view.setCompany(companies.get(position));
+//            view.setCompany(companies.get(position));
             return view;
         } else {
             return convertView;

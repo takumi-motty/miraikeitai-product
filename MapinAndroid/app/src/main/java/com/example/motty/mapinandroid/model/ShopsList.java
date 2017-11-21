@@ -7,20 +7,20 @@ import android.os.Parcelable;
 import java.util.List;
 
 public class ShopsList implements Parcelable{
-    public List<ApiShopsFiles> shopsFiles;
+    public List<ApiShops> shopsFiles;
 
-    public ShopsList(List<ApiShopsFiles> shopsFiles) {
+    public ShopsList(List<ApiShops> shopsFiles) {
         this.shopsFiles = shopsFiles;
     }
     public ShopsList(Parcel in) {
-        this(in.readArrayList(ApiShopsFiles.class.getClassLoader()));
+        this(in.readArrayList(ApiShops.class.getClassLoader()));
     }
 
-    public List<ApiShopsFiles> getShopsFiles() {
+    public List<ApiShops> getShopsFiles() {
         return shopsFiles;
     }
 
-    public void setShopsFiles(List<ApiShopsFiles> shopsFiles) {
+    public void setShopsFiles(List<ApiShops> shopsFiles) {
         this.shopsFiles = shopsFiles;
     }
 

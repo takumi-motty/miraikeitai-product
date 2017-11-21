@@ -148,7 +148,7 @@
         android:layout_below="@+id/view5">
 
         <ListView
-            android:id="@+id/listView01"
+            android:id="@+id/fileListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

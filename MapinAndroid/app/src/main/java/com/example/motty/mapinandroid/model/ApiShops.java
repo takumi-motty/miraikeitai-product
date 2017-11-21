@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 public class ApiShops implements Parcelable {
+//public class ApiShops{
     private int id;
     private String name;
 
@@ -32,13 +33,16 @@ public class ApiShops implements Parcelable {
     @SerializedName("updated_at")
     private String updatedAt;
 
+    private double longitude;
+    private double latitude;
+
     @SerializedName("company_name")
     private String companyName;
 
     @SerializedName("category_name")
     private String categoryName;
 
-    public ApiShops(int id, String name, String imageUrl, String postalCode, String address, String tel, String bussinessHours, int category_id, String homepage, int company_id, String createdAt, String updatedAt, String companyName, String categoryName) {
+    public ApiShops(int id, String name, String imageUrl, String postalCode, String address, String tel, String bussinessHours, int category_id, String homepage, int company_id, String createdAt, String updatedAt, double longitude, double latitude, String companyName, String categoryName) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
@@ -51,11 +55,13 @@ public class ApiShops implements Parcelable {
         this.company_id = company_id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.companyName = companyName;
         this.categoryName = categoryName;
     }
     public ApiShops(Parcel in){
-        this(in.readInt(), in.readString(), in.readString(), in.readString(), in.readString(), in.readString(), in.readString(), in.readInt(), in.readString(), in.readInt(), in.readString(), in.readString(), in.readString(), in.readString());
+        this(in.readInt(), in.readString(), in.readString(), in.readString(), in.readString(), in.readString(), in.readString(), in.readInt(), in.readString(), in.readInt(), in.readString(), in.readString(),in.readDouble(), in.readDouble(), in.readString(), in.readString());
 
     }
 
@@ -155,6 +161,22 @@ public class ApiShops implements Parcelable {
         this.updatedAt = updatedAt;
     }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
     public String getCompanyName() {
         return companyName;
     }
@@ -169,6 +191,10 @@ public class ApiShops implements Parcelable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public static Creator<ApiShops> getCREATOR() {
+        return CREATOR;
     }
 
     @Override
@@ -186,6 +212,8 @@ public class ApiShops implements Parcelable {
                 ", company_id=" + company_id +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
                 ", companyName='" + companyName + '\'' +
                 ", categoryName='" + categoryName + '\'' +
                 '}';
@@ -210,6 +238,8 @@ public class ApiShops implements Parcelable {
         dest.writeInt(company_id);
         dest.writeString(createdAt);
         dest.writeString(updatedAt);
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
         dest.writeString(companyName);
         dest.writeString(categoryName);
 

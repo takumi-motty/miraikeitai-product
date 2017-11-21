@@ -27,7 +27,7 @@ public class ApiShopsList implements Parcelable{
     @Override
     public String toString() {
         return "ApiShopsList{" +
-                "ApiShops=" + listShops +
+                "listShops=" + listShops +
                 '}';
     }
 

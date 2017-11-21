@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.motty.mapinandroid.R;
 import com.example.motty.mapinandroid.model.ApiShops;
-import com.example.motty.mapinandroid.model.Company;
 
 public class TopListView extends LinearLayout {
     private Context context;
@@ -38,14 +37,6 @@ public class TopListView extends LinearLayout {
         textViewCategory = (TextView) findViewById(R.id.categoryText);
         textViewUpdate_at = (TextView) findViewById(R.id.update_atText);
         imageView = (ImageView) findViewById(R.id.imageViewShop);
-    }
-
-    public void setCompany(Company company) {
-//        textViewShopName.setText(company.);
-        textViewCompanyName.setText(company.getCompanyInfo().getName());
-//        textViewCategory.setText(company.);
-//        Glide.with(context).load(company..getImageUrl()).into(imageView);
-//        textViewUpdate_at.setText(company.getUpdated_at());
     }
 
     public void setShops(ApiShops listShops){

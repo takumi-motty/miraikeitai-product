@@ -2,6 +2,7 @@ package com.example.motty.mapinandroid;
 
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -14,10 +15,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 
 import com.example.motty.mapinandroid.adapter.ShopListAdapter;
-import com.example.motty.mapinandroid.adapter.TopListAdapter;
 import com.example.motty.mapinandroid.model.ApiShops;
-import com.example.motty.mapinandroid.model.ApiShopsFiles;
-import com.example.motty.mapinandroid.model.MapinResponse;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
@@ -32,29 +30,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 //トップ画面
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-//public class MainActivity extends AppCompatActivity {
-
-//    private ArrayAdapter<Company> adapter;
-    private TopListAdapter topListAdapter;
-//    private TopListAdapter refreshAdapter;
-
     private ShopListAdapter refreshAdapter;
 
     final ArrayList<ApiShops> companies = new ArrayList<>();
-//    ImageView imageView = (ImageView) findViewById(R.id.imageViewShop);
-    //final ArrayList<File> files = new ArrayList<>();
-
 
     //pullToRefresh
     protected PullToRefreshListView listView;
 
-    private MapinResponse mapinResponse;
-
     private ApiShops apiShops;
 
-    private List<ApiShopsFiles> shopsFilesList;
+    Location location;
 
-    private ArrayList<ApiShops> listShops = new ArrayList<>();
+    final private ArrayList<ApiShops> listShops = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             actionBar.setDisplayUseLogoEnabled(true);
             actionBar.setLogo(R.drawable.splash);
         }
+
+//        double latitude = location.getLatitude();
+//        double longitude = location.getLongitude();
+//
+//        Log.d("MainActivity", String.valueOf(latitude));
+//        Log.d("MainActivity", String.valueOf(longitude));
 
         // EditTextで自動的にキーボードが出るのを防ぐ処理
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -84,10 +77,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         listView.setAdapter(refreshAdapter);
         listView.setOnItemClickListener(this);
-        //ListView listView = (ListView) findViewById(R.id.list_view);
-
-        //listView.setOnItemClickListener(this);
-        //getData();
+        getShopData();
     }
 
     // リスト更新
@@ -106,16 +96,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-
-
     // リストをタップした時の動作
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         Intent intent = new Intent(this.getApplicationContext(), CompanyInformationActivity.class);
 
         position = position-1;
-        intent.putParcelableArrayListExtra("ShopsInfo", listShops);
-
+//        intent.putParcelableArrayListExtra("ShopsInfo", listShops);
         intent.putExtra("CompanyName", listShops.get(position).getCompanyName());
         intent.putExtra("ShopName", listShops.get(position).getName());
         intent.putExtra("Category", listShops.get(position).getCategoryName());
@@ -126,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtra("Homepage", listShops.get(position).getHomepage());
         intent.putExtra("BussinessHours", listShops.get(position).getBussinessHours());
         intent.putExtra("ImageUrl", listShops.get(position).getImageUrl());
+        intent.putExtra("ShopId", listShops.get(position).getId());
 
         startActivity(intent);
     }
@@ -156,40 +144,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        getData();
-        getShopData();
-        //getShopFileData();
-    }
-
-//    private void getData() {
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://54.199.196.68/")
-//                .baseUrl("http://54.238.225.122/"
-//                .baseUrl("http://133.25.196.21/")
-//                .baseUrl("http://ec2-54-199-196-68.ap-northeast-1.compute.amazonaws.com")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        ApiService service = retrofit.create(ApiService.class);
-//        final Call<MapinResponse> mapinResponseCall = service.getMapinResponse();
-//
-//        mapinResponseCall.enqueue(new Callback<MapinResponse>() {
-//            @Override
-//            public void onResponse(Call<MapinResponse> call, Response<MapinResponse> response) {
-//                mapinResponse = response.body();
-//                companies.addAll(mapinResponse.getCompanies());
-//                Log.d("MainActivity", mapinResponse.toString());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MapinResponse> call, Throwable t) {
-//                Log.d("MainActivity", t.getMessage());
-//            }
-//        });
-//        }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        getShopData();
+//    }
 
     //店舗情報単体を取得
         private void getShopData() {
@@ -206,9 +165,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 public void onResponse(Call<ApiShops> call, Response<ApiShops> response) {
                     apiShops = response.body();
 //                    companies.addAll(mapinResponse.getApiShopses());
-                    Log.d("MainActivity", apiShops.toString());
+//                    Log.d("MainActivity", apiShops.toString());
                 }
-
                 @Override
                 public void onFailure(Call<ApiShops> call, Throwable t) {
                     Log.d("MainActivity", t.getMessage());
@@ -218,8 +176,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        店舗情報のリストを取得
             Call<List<ApiShops>> apiShopsListCall = service.getApiShopsList();
             apiShopsListCall.enqueue(new Callback<List<ApiShops>>() {
-
-
                 @Override
                 public void onResponse(Call<List<ApiShops>> call, Response<List<ApiShops>> response) {
                     listShops.addAll(response.body());
@@ -234,47 +190,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             });
         }
 
-//                private void getShopFileData() {
-//            Retrofit retrofit = new Retrofit.Builder()
-//                    .baseUrl("http://ec2-54-199-196-68.ap-northeast-1.compute.amazonaws.com/")
-//                    .addConverterFactory(GsonConverterFactory.create())
-//                    .build();
-//
-//            ApiService service = retrofit.create(ApiService.class);
-//            Call<ShopsList> shopsListCall = service.getApiFilesList(3);
-//
-//            shopsListCall.enqueue(new Callback<ShopsList>() {
-//                @Override
-//                public void onResponse(Call<ShopsList> call, Response<ShopsList> response) {
-//                    shopsFilesList = response.body().getShopsFiles();
-//                    Log.d("MainActivity", shopsFilesList.toString());
-//                    updateContainer(listShops);
-//                }
-//
-//                @Override
-//                public void onFailure(Call<ShopsList> call, Throwable t) {
-//                    Log.d("MainActivity", t.getMessage());
-//                    updateContainer(listShops);
-//                }
-//            });
-//        }
-
-
-//    private void updateContainer(ArrayList<Company> companies) {
     private void updateContainer(ArrayList<ApiShops> listShops) {
-
-//        TopListAdapter topListAdapter = new TopListAdapter(datas, getApplicationContext());
-//        for (Company company : companies) {
-//            adapter.add(company);
-//        }
-//        topListAdapter.setDatas(companies);
-//        topListAdapter.notifyDataSetChanged();
-//        refreshAdapter.setDatas(companies);
-
         refreshAdapter.setShopsData(listShops);
         refreshAdapter.notifyDataSetChanged();
-
-
     }
 
 }
