@@ -5,36 +5,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.example.motty.mapinandroid.model.Company;
-import com.example.motty.mapinandroid.model.Shop;
+import com.example.motty.mapinandroid.model.ApiShops;
 import com.example.motty.mapinandroid.view.TopListView;
 
 import java.util.ArrayList;
 
-public class TopListAdapter extends BaseAdapter {
 
-//    private ArrayList<TopListView> companies;
-//    private ArrayList<Company> topCompany;
-    private ArrayList<Shop> shops;
-    private Company company;
-    private ArrayList<Company> companies;
+public class ShopListAdapter extends BaseAdapter {
     private Context context;
+    private ArrayList<ApiShops> listShops;
 
-
-    public TopListAdapter(Context context) {
+    public ShopListAdapter(Context context) {
         this.context = context;
-        this.companies = new ArrayList<>();
+        this.listShops = new ArrayList<>();
     }
-
 
     @Override
     public int getCount() {
-        return companies.size();
+        return listShops.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return companies.get(position);
+        return listShops.get(position);
     }
 
     @Override
@@ -46,15 +39,14 @@ public class TopListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null || !(convertView instanceof TopListView)) {
             TopListView view = new TopListView(context);
-//            view.setCompany(companies.get(position));
+            view.setShops(listShops.get(position));
             return view;
         } else {
             return convertView;
         }
     }
 
-
-    public void setDatas(ArrayList<Company> companies) {
-        this.companies = companies;
+    public void setShopsData(ArrayList<ApiShops> listShops) {
+        this.listShops = listShops;
     }
 }

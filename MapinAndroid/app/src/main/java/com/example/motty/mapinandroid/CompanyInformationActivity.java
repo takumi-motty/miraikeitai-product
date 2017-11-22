@@ -1,13 +1,15 @@
 package com.example.motty.mapinandroid;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,13 +17,31 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.motty.mapinandroid.adapter.FileListAdapter;
+import com.example.motty.mapinandroid.model.ShopFile;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.example.motty.mapinandroid.R.id.selected_photo;
 
 //ファイル情報画面&企業情報画面
-public class CompanyInformationActivity extends AppCompatActivity {
+public class CompanyInformationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private ArrayList<String> item_list;
+//    private ArrayList<String> item_list;
+    final private ArrayList<ShopFile> listFiles = new ArrayList<>();
+
+    private FileListAdapter fileListAdapter;
+
+    protected ListView listView;
+
+    private ShopFile apiFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,43 +57,29 @@ public class CompanyInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_company_information);
 
         Intent intent = getIntent();
-        //String selectedText = intent.getStringExtra("Text");
-//        int selectedPhoto = intent.getIntExtra("Photo", 0);
+        String companyName = intent.getStringExtra("CompanyName");
 
-        //ArrayList<Company> companies_information = (ArrayList<Company>) intent.getSerializableExtra("Companies");
-
-
-        //int position = intent.getIntExtra("position", 0);
-        String shop_Name = intent.getStringExtra("ShopName");
-        String company_Name = intent.getStringExtra("CompanyName");
+        String shopName = intent.getStringExtra("ShopName");
         String category = intent.getStringExtra("Category");
-        String updated_at = intent.getStringExtra("Updated_at");
-        String imageUrl = intent.getStringExtra("ImageUrl");
-        String postalCode = intent.getStringExtra("PostalCode");
+        String updatedAt = intent.getStringExtra("UpdatedAt");
+        String postalCode = intent.getStringExtra("PostNumber");
+        String bussinessHours = intent.getStringExtra("BussinessHours");
         String address = intent.getStringExtra("Address");
         String tel = intent.getStringExtra("Tel");
         String homepage = intent.getStringExtra("Homepage");
-        String hours_Begin = intent.getStringExtra("hoursBegin");
-        String hours_End = intent.getStringExtra("hoursEnd");
-
-
-        //String s = companies_information.get(0).getShop_name();
-
-
-
+        String imageUrl = intent.getStringExtra("ImageUrl");
 
         TextView shopNameText = (TextView) findViewById(R.id.textShopName);
-        shopNameText.setText(shop_Name);
-        //shopNameText.setText(companies_information.get(position).getShop_name());
+        shopNameText.setText(shopName);
 
         TextView companyNameText = (TextView) findViewById(R.id.textCompanyName);
-        companyNameText.setText(company_Name);
+        companyNameText.setText(companyName);
 
         TextView categoryText = (TextView) findViewById(R.id.textCategory);
         categoryText.setText(category);
 
         TextView updated_atText = (TextView) findViewById(R.id.textUpdated_at);
-        updated_atText.setText(updated_at);
+        updated_atText.setText(updatedAt);
 
         TextView postal_codeText = (TextView) findViewById(R.id.textPostNumber);
         postal_codeText.setText(postalCode);
@@ -87,77 +93,48 @@ public class CompanyInformationActivity extends AppCompatActivity {
         TextView homepageText = (TextView) findViewById(R.id.textURL);
         homepageText.setText(homepage);
 
+        TextView bussiness_hoursText = (TextView) findViewById(R.id.textBussinessHours);
+        bussiness_hoursText.setText(bussinessHours);
 
-        TextView hours_beginText = (TextView) findViewById(R.id.textBegin);
-        hours_beginText.setText(hours_Begin);
-
-        TextView hours_endText = (TextView) findViewById(R.id.textEnd);
-        hours_endText.setText(hours_End);
-
-
-
-        /*TextView textView = (TextView) findViewById(R.id.selected_text);
-        textView.setText(selectedText);*/
-        ImageView imageView = (ImageView) findViewById(R.id.selected_photo);
+        ImageView imageView = (ImageView) findViewById(selected_photo);
         Glide.with(getApplicationContext()).load(imageUrl).into(imageView);
-        //imageView.setImageResource(selectedPhoto);
+
+        fileListAdapter = new FileListAdapter(this.getApplicationContext());
+        final ListView fileListView = (ListView) findViewById(R.id.fileListView);
 
 
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_list_item_1);
-        for (int i = 1; i < 6; i++) {
-            adapter.add("設置ファイル" + i);
-        }
-
-        final ListView listView1 = (ListView) findViewById(R.id.listView01);
-
-        //ファイル文字列格納用リスト
-        item_list = new ArrayList<String>();
-
-        //アダプターの作成
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1,item_list);
-
-
-        listView1.setAdapter(adapter);
-
-//        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
-//                this, android.R.layout.simple_list_item_1);
-//        for (int i = 1; i < 6; i++) {
-//            adapter2.add("店舗情報" + i);
-//        }
-
-        //final ListView listView2 = (ListView) findViewById(R.id.listView02);
-        //listView2.setAdapter(adapter2);
 
         final RelativeLayout detail = (RelativeLayout) findViewById(R.id.companyDetailInformation);
 
         Button btn1 = (Button) this.findViewById(R.id.Button01);
         final Button btn3 = (Button) this.findViewById(R.id.Button03);
 
+
+        getFileData();
+
         // ファイルを押した時の動作
         btn3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Button btn1 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button01);
                 Button btn3 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button03);
-                ListView listView1 = (ListView) CompanyInformationActivity.this.findViewById(R.id.listView01);
-                //ListView listView2 = (ListView) CompanyInformationActivity.this.findViewById(R.id.listView02);
+//                ListView listView1 = (ListView) CompanyInformationActivity.this.findViewById(R.id.fileListView);
                 RelativeLayout detail = (RelativeLayout) findViewById(R.id.companyDetailInformation);
+
+                fileListAdapter.setFileData(listFiles);
+                fileListView.setAdapter(fileListAdapter);
+                fileListAdapter.notifyDataSetChanged();
 
 
                 if (btn1.getVisibility() != View.VISIBLE) {
                     btn1.setVisibility(View.VISIBLE);
                     btn3.setVisibility(View.INVISIBLE);
-                    listView1.setVisibility(View.VISIBLE);
-                    //listView2.setVisibility(View.INVISIBLE);
+                    fileListView.setVisibility(View.VISIBLE);
                     detail.setVisibility(View.INVISIBLE);
 
                 } else {
                     btn1.setVisibility(View.INVISIBLE);
                     btn3.setVisibility(View.VISIBLE);
-                    //listView2.setVisibility(View.INVISIBLE);
-                    listView1.setVisibility(View.INVISIBLE);
+                    fileListView.setVisibility(View.INVISIBLE);
                     detail.setVisibility(View.INVISIBLE);
                 }
             }
@@ -169,26 +146,27 @@ public class CompanyInformationActivity extends AppCompatActivity {
                 Button btn1 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button01);
                 Button btn3 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button03);
 
+                fileListAdapter.setFileData(listFiles);
+                fileListView.setAdapter(fileListAdapter);
+
                 if (btn3.getVisibility() != View.VISIBLE) {
                     btn3.setVisibility(View.VISIBLE);
                     btn1.setVisibility(View.INVISIBLE);
-                    //listView2.setVisibility(View.VISIBLE);
-                    listView1.setVisibility(View.INVISIBLE);
+                    fileListView.setVisibility(View.INVISIBLE);
                     detail.setVisibility(View.VISIBLE);
 
                 } else {
 
                     btn3.setVisibility(View.INVISIBLE);
                     btn1.setVisibility(View.VISIBLE);
-                    listView1.setVisibility(View.VISIBLE);
-                    //listView2.setVisibility(View.INVISIBLE);
+                    fileListView.setVisibility(View.VISIBLE);
                     detail.setVisibility(View.INVISIBLE);
                 }
             }
         });
+
+        fileListView.setOnItemClickListener(this);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -212,4 +190,93 @@ public class CompanyInformationActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View v,
+                            int position, long id) {
+
+        Intent intent = new Intent(
+                this.getApplicationContext(), ImageFileViewActivity.class);
+
+        Intent intentDrive = new Intent(Intent.ACTION_VIEW);
+        String url = listFiles.get(position).getUrl();
+        intentDrive.setDataAndType(Uri.parse("http://docs.google.com/viewer?url=" + url), "text/html");
+
+        switch(listFiles.get(position).getFileType()){
+            case "pdf":
+                startActivity(intentDrive);
+                break;
+            case "png":
+                intent.putExtra("FileUrl", listFiles.get(position).getUrl());
+                startActivity(intent);
+                break;
+            case "jpg":
+                intent.putExtra("FileUrl", listFiles.get(position).getUrl());
+                startActivity(intent);
+                break;
+            case "docx":
+                startActivity(intentDrive);
+                break;
+            case "xls":
+                startActivity(intentDrive);
+                break;
+            case "txt":
+                break;
+            case "pptx":
+                startActivity(intentDrive);
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
+    private void getFileData() {
+        Intent intent = getIntent();
+        int shopId = intent.getIntExtra("ShopId", 0);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://ec2-54-199-196-68.ap-northeast-1.compute.amazonaws.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+        ApiService service = retrofit.create(ApiService.class);
+
+        Call<ShopFile> shopFileCall = service.getApiShopFile(1,2);
+        shopFileCall.enqueue(new Callback<ShopFile>() {
+            @Override
+            public void onResponse(Call<ShopFile> call, Response<ShopFile> response) {
+                apiFile = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<ShopFile> call, Throwable t) {
+
+            }
+        });
+
+        Call<List<ShopFile>> fileListCall = service.getApiFilesList(shopId);
+        fileListCall.enqueue(new Callback<List<ShopFile>>() {
+            @Override
+            public void onResponse(Call<List<ShopFile>> call, Response<List<ShopFile>> response) {
+                listFiles.addAll(response.body());
+                Log.d("CompanyInformationActivity", listFiles.toString());
+                fileContainer(listFiles);
+            }
+            @Override
+            public void onFailure(Call<List<ShopFile>> call, Throwable t) {
+                fileContainer(listFiles);
+            }
+        });
+    }
+
+    private void fileContainer(ArrayList<ShopFile> listFiles) {
+        fileListAdapter.setFileData(listFiles);
+        fileListAdapter.notifyDataSetChanged();
+    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        getFileData();
+//    }
 }
