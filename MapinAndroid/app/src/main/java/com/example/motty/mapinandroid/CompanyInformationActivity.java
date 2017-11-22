@@ -1,6 +1,7 @@
 package com.example.motty.mapinandroid;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -101,7 +102,7 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         fileListAdapter = new FileListAdapter(this.getApplicationContext());
         final ListView fileListView = (ListView) findViewById(R.id.fileListView);
 
-//        fileListView.setOnItemClickListener(this);
+
 
         final RelativeLayout detail = (RelativeLayout) findViewById(R.id.companyDetailInformation);
 
@@ -109,7 +110,7 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         final Button btn3 = (Button) this.findViewById(R.id.Button03);
 
 
-//        getFileData();
+        getFileData();
 
         // ファイルを押した時の動作
         btn3.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +164,8 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
                 }
             }
         });
+
+        fileListView.setOnItemClickListener(this);
     }
 
     @Override
@@ -192,8 +195,39 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
                             int position, long id) {
 
         Intent intent = new Intent(
-                this.getApplicationContext(), ContentFileActivity.class);
-        startActivity(intent);
+                this.getApplicationContext(), ImageFileViewActivity.class);
+
+        Intent intentDrive = new Intent(Intent.ACTION_VIEW);
+        String url = listFiles.get(position).getUrl();
+        intentDrive.setDataAndType(Uri.parse("http://docs.google.com/viewer?url=" + url), "text/html");
+
+        switch(listFiles.get(position).getFileType()){
+            case "pdf":
+                startActivity(intentDrive);
+                break;
+            case "png":
+                intent.putExtra("FileUrl", listFiles.get(position).getUrl());
+                startActivity(intent);
+                break;
+            case "jpg":
+                intent.putExtra("FileUrl", listFiles.get(position).getUrl());
+                startActivity(intent);
+                break;
+            case "docx":
+                startActivity(intentDrive);
+                break;
+            case "xls":
+                startActivity(intentDrive);
+                break;
+            case "txt":
+                break;
+            case "pptx":
+                startActivity(intentDrive);
+                break;
+            default:
+                break;
+
+        }
 
     }
 
@@ -240,9 +274,9 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         fileListAdapter.setFileData(listFiles);
         fileListAdapter.notifyDataSetChanged();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getFileData();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        getFileData();
+//    }
 }

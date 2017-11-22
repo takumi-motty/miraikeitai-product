@@ -32,7 +32,8 @@
         <activity
             android:name=".ContentFileActivity"
             android:label="@string/title_activity_content_file"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ImageFileViewActivity"></activity>
     </application>
 
 </manifest>
