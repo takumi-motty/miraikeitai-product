@@ -7,7 +7,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -109,6 +108,8 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         Button btn1 = (Button) this.findViewById(R.id.Button01);
         final Button btn3 = (Button) this.findViewById(R.id.Button03);
 
+        fileListAdapter.setFileData(listFiles);
+        fileListView.setAdapter(fileListAdapter);
 
         getFileData();
 
@@ -117,13 +118,7 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
             public void onClick(View v) {
                 Button btn1 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button01);
                 Button btn3 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button03);
-//                ListView listView1 = (ListView) CompanyInformationActivity.this.findViewById(R.id.fileListView);
                 RelativeLayout detail = (RelativeLayout) findViewById(R.id.companyDetailInformation);
-
-                fileListAdapter.setFileData(listFiles);
-                fileListView.setAdapter(fileListAdapter);
-                fileListAdapter.notifyDataSetChanged();
-
 
                 if (btn1.getVisibility() != View.VISIBLE) {
                     btn1.setVisibility(View.VISIBLE);
@@ -139,15 +134,11 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
                 }
             }
         });
-
         // 企業情報を押した時の動作
         btn1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Button btn1 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button01);
                 Button btn3 = (Button) CompanyInformationActivity.this.findViewById(R.id.Button03);
-
-                fileListAdapter.setFileData(listFiles);
-                fileListView.setAdapter(fileListAdapter);
 
                 if (btn3.getVisibility() != View.VISIBLE) {
                     btn3.setVisibility(View.VISIBLE);
@@ -156,7 +147,6 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
                     detail.setVisibility(View.VISIBLE);
 
                 } else {
-
                     btn3.setVisibility(View.INVISIBLE);
                     btn1.setVisibility(View.VISIBLE);
                     fileListView.setVisibility(View.VISIBLE);
@@ -174,21 +164,6 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.optionsMenu_01:
-                Intent intent1 = new android.content.Intent(this, ConfigurationActivity.class);
-                startActivity(intent1);
-                return true;
-            case R.id.optionsMenu_02:
-                Intent intent2 = new android.content.Intent(this, InquiryActivity.class);
-                startActivity(intent2);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v,
