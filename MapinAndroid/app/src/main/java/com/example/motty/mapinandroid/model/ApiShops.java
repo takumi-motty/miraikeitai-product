@@ -2,8 +2,13 @@ package com.example.motty.mapinandroid.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class ApiShops implements Parcelable {
@@ -154,7 +159,18 @@ public class ApiShops implements Parcelable {
     }
 
     public String getUpdatedAt() {
-        return updatedAt;
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        String rs;
+        Date updatedAt2;
+        try {
+            updatedAt2 = sdf1.parse(updatedAt.substring(0,10));
+            SimpleDateFormat format2 = new SimpleDateFormat("yyyy年MM月dd日");
+            rs = format2.format(updatedAt2);
+            return rs;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return updatedAt;
+        }
     }
 
     public void setUpdatedAt(String updatedAt) {
