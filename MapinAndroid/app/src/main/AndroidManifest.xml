@@ -7,9 +7,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/splash"
+        android:icon="@drawable/icon"
         android:label="@string/application_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SplashActivity">
@@ -21,18 +21,10 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".CompanyInformationActivity" />
-        <activity android:name=".InquiryActivity" />
-        <activity android:name=".ConfigurationActivity" />
-        <activity android:name=".DetailedInformationActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="4030500" />
-
-        <activity
-            android:name=".ContentFileActivity"
-            android:label="@string/title_activity_content_file"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ImageFileViewActivity"></activity>
     </application>
 

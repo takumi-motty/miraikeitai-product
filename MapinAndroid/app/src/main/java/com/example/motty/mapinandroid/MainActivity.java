@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -66,12 +65,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         setContentView(R.layout.activity_main);
 
-        //getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.splash);
-
         //pullToRefresh
         listView = (PullToRefreshListView) findViewById(R.id.listView);
-//        refreshAdapter = new TopListAdapter(this.getApplicationContext(), R.layout.list, scenes, photos);
-//        refreshAdapter = new TopListAdapter(this.getApplicationContext());
 
         refreshAdapter = new ShopListAdapter(this.getApplicationContext());
 
@@ -125,28 +120,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return true;
     }
 
-    // オプションをタップした時の動作
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // 設定をタップした時
-            case R.id.optionsMenu_01:
-                Intent intent1 = new android.content.Intent(this, ConfigurationActivity.class);
-                startActivity(intent1);
-                return true;
-            // お問い合わせをタップした時
-            case R.id.optionsMenu_02:
-                Intent intent2 = new android.content.Intent(this, InquiryActivity.class);
-                startActivity(intent2);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 //    @Override
 //    protected void onResume() {
 //        super.onResume();
+//        listShops.clear();
 //        getShopData();
 //    }
 
