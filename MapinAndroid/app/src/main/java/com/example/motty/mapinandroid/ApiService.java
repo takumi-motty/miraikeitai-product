@@ -41,7 +41,7 @@ public interface ApiService {
 
     //shopの情報を緯度経度で取得
     @GET("api/shops?latitude={latitude}&{longitude}.json")
-    Call<List<ApiShops>> getApiShopsListLocation(@Path("latitude") int latitude, @Path("longitude") int longitude);
+    Call<List<ApiShops>> getApiShopsListLocation(@Path("latitude") double latitude, @Path("longitude") double longitude);
 
 
     @GET("/api/shops/{id}/files/{fileId}.json")

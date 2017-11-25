@@ -1,10 +1,14 @@
 package com.example.motty.mapinandroid;
 
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private ApiShops apiShops;
 
+    //位置情報のサービス
+    public LocationService locationService;
+
     Location location;
 
     final private ArrayList<ApiShops> listShops = new ArrayList<>();
@@ -65,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         setContentView(R.layout.activity_main);
 
+        //位置情報取得
+        final Intent serviceStart = new Intent(this.getApplication(), LocationService.class);
+        this.getApplication().startService(serviceStart);
+        this.getApplication().bindService(serviceStart, serviceConnection, Context.BIND_AUTO_CREATE);
+
         //pullToRefresh
         listView = (PullToRefreshListView) findViewById(R.id.listView);
 
@@ -90,6 +102,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             super.onPostExecute(strings);
         }
     }
+
+    //　位置情報実装
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            String name = className.getClassName();
+
+            if (name.endsWith("LocationService")) {
+                locationService = ((LocationService.LocationServiceBinder) service).getService();
+
+                locationService.startUpdatingLocation();
+            }
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+
+            if (className.getClassName().equals("LocationService")) {
+                locationService = null;
+            }
+        }
+    };
 
     // リストをタップした時の動作
     @Override
@@ -129,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     //店舗情報単体を取得
         private void getShopData() {
+            Intent intent = getIntent();
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://ec2-54-199-196-68.ap-northeast-1.compute.amazonaws.com/")
                     .addConverterFactory(GsonConverterFactory.create())
