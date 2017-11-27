@@ -36,7 +36,6 @@ public class LocationService extends Service implements LocationListener{
     private NotificationManager mManager;
     private int number = 0;
 
-
     public LocationService() {
 
     }
@@ -48,9 +47,6 @@ public class LocationService extends Service implements LocationListener{
         isLogging = false;
 
     }
-
-
-
 
     @Override
     public int onStartCommand(Intent i, int flags, int startId) {
@@ -147,8 +143,6 @@ public class LocationService extends Service implements LocationListener{
         //Broadcast location provider status change here
     }
 
-
-
     public void startUpdatingLocation() {
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -223,14 +217,17 @@ public class LocationService extends Service implements LocationListener{
     @Override
     public void onLocationChanged(final Location newLocation) {
         /*位置情報を受け取った際の処理*/
-        Log.d(TAG, "(" + newLocation.getLatitude() + "," + newLocation.getLongitude() + ")");
 
-//        double latitude = newLocation.getLatitude();
-//        double longitude = newLocation.getLongitude();
-//
-//        Intent intentMain = new Intent("MainActivity");
-//        intentMain.putExtra("latitude", latitude);
-//        intentMain.putExtra("longitude", longitude);
+//        Log.d(TAG, "(" + newLocation.getLatitude() + "," + newLocation.getLongitude() + ")");
+
+        double latitude = newLocation.getLatitude();
+        double longitude = newLocation.getLongitude();
+
+        Log.d(TAG, "(" + latitude + "," + longitude + ")");
+
+        Intent intentMain = new Intent("MainActivity");
+        intentMain.putExtra("latitude", latitude);
+        intentMain.putExtra("longitude", longitude);
         //Toast.makeText(this, newLocation.getLatitude() + "," + newLocation.getLongitude(), Toast.LENGTH_SHORT).show();
         sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
 
