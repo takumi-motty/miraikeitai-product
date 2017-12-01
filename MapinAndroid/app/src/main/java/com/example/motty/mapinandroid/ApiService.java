@@ -8,6 +8,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 public interface ApiService {
@@ -39,9 +40,10 @@ public interface ApiService {
     @GET("api/shops.json")
     Call<List<ApiShops>> getApiShopsList();
 
-    //shopの情報を緯度経度で取得
-    @GET("api/shops?latitude={latitude}&{longitude}.json")
-    Call<List<ApiShops>> getApiShopsListLocation(@Path("latitude") int latitude, @Path("longitude") int longitude);
+//    @GET("api/shops?latitude={latitude}&longitude={longitude}.json")
+//    Call<List<ApiShops>> getApiShopsListLocation(@Path("latitude") double latitude, @Path("longitude") double longitude);
+    @GET("api/shops")
+    Call<List<ApiShops>> getApiShopsListLocation(@Query(value = "latitude", encoded = true) double latitude, @Query(value = "longitude", encoded = true) double longitude);
 
 
     @GET("/api/shops/{id}/files/{fileId}.json")

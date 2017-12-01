@@ -1,10 +1,18 @@
 package com.example.motty.mapinandroid;
 
 
+import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,9 +46,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private ApiShops apiShops;
 
-    Location location;
+    //位置情報のサービス
+    public LocationService locationService;
+
+    private double mLatitude;
+    private double mLongitude;
 
     final private ArrayList<ApiShops> listShops = new ArrayList<>();
+
+    private LocationManager locationManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +62,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // メニューバーにロゴを表示
         ActionBar actionBar = getSupportActionBar();
-        if ( actionBar != null ) {
+        if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayUseLogoEnabled(true);
             actionBar.setLogo(R.drawable.splash);
         }
 
-//        double latitude = location.getLatitude();
-//        double longitude = location.getLongitude();
-//
-//        Log.d("MainActivity", String.valueOf(latitude));
-//        Log.d("MainActivity", String.valueOf(longitude));
-
         // EditTextで自動的にキーボードが出るのを防ぐ処理
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         setContentView(R.layout.activity_main);
+
+        //位置情報取得
+        final Intent serviceStart = new Intent(this.getApplication(), LocationService.class);
+        this.getApplication().startService(serviceStart);
+        this.getApplication().bindService(serviceStart, serviceConnection, Context.BIND_AUTO_CREATE);
 
         //pullToRefresh
         listView = (PullToRefreshListView) findViewById(R.id.listView);
@@ -90,6 +103,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             super.onPostExecute(strings);
         }
     }
+
+    //　位置情報実装
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            String name = className.getClassName();
+
+            if (name.endsWith("LocationService")) {
+                locationService = ((LocationService.LocationServiceBinder) service).getService();
+
+                locationService.startUpdatingLocation();
+            }
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+
+            if (className.getClassName().equals("LocationService")) {
+                locationService = null;
+            }
+        }
+    };
 
     // リストをタップした時の動作
     @Override
@@ -129,6 +163,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     //店舗情報単体を取得
         private void getShopData() {
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            if (location != null) {
+                mLatitude = location.getLatitude();
+                mLongitude = location.getLongitude();
+
+                Log.d("MainActivity", String.valueOf(mLatitude) + "," + String.valueOf(mLongitude));
+
+            }else{
+                Log.e("GPS", "Can't get last location.");
+            }
+
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://ec2-54-199-196-68.ap-northeast-1.compute.amazonaws.com/")
                     .addConverterFactory(GsonConverterFactory.create())
@@ -143,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     apiShops = response.body();
 //                    companies.addAll(mapinResponse.getApiShopses());
 //                    Log.d("MainActivity", apiShops.toString());
+//                    Log.d("MainActivity", String.valueOf(latitude));
                 }
                 @Override
                 public void onFailure(Call<ApiShops> call, Throwable t) {
@@ -151,7 +210,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             });
 
 //        店舗情報のリストを取得
-            Call<List<ApiShops>> apiShopsListCall = service.getApiShopsList();
+//            Call<List<ApiShops>> apiShopsListCall = service.getApiShopsList();
+            Call<List<ApiShops>> apiShopsListCall = service.getApiShopsListLocation(mLatitude, mLongitude);
             apiShopsListCall.enqueue(new Callback<List<ApiShops>>() {
                 @Override
                 public void onResponse(Call<List<ApiShops>> call, Response<List<ApiShops>> response) {

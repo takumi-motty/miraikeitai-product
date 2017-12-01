@@ -164,7 +164,6 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         return true;
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View v,
                             int position, long id) {
