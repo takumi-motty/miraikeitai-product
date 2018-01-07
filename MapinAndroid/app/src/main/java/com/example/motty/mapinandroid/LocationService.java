@@ -48,8 +48,6 @@ public class LocationService extends Service implements LocationListener, GpsSta
         isLogging = false;
     }
 
-
-
     @Override
     public int onStartCommand(Intent i, int flags, int startId) {
         super.onStartCommand(i, flags, startId);
@@ -79,12 +77,9 @@ public class LocationService extends Service implements LocationListener, GpsSta
     @Override
     public void onDestroy() {
         Log.d(LOG_TAG, "onDestroy ");
-
-
     }
 
 
-    //This is where we detect the app is being killed, thus stop service.
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.d(LOG_TAG, "onTaskRemoved ");
@@ -97,16 +92,11 @@ public class LocationService extends Service implements LocationListener, GpsSta
         stopSelf();
     }
 
-
-
-
     public class LocationServiceBinder extends Binder {
         public LocationService getService() {
             return LocationService.this;
         }
     }
-
-
 
     /* LocationListener implemenation */
     @Override

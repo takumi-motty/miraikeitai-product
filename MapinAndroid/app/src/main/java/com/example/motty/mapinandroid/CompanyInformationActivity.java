@@ -248,9 +248,4 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         fileListAdapter.setFileData(listFiles);
         fileListAdapter.notifyDataSetChanged();
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        getFileData();
-//    }
 }

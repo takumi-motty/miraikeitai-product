@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             actionBar.setLogo(R.drawable.splash);
         }
 
+        // 位置情報の許可するダイアログボックスを表示
         // Android 6.0以上の場合
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             // 位置情報の取得が許可されているかチェック
