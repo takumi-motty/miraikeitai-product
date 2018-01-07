@@ -9,7 +9,6 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
@@ -20,10 +19,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.example.motty.mapinandroid.adapter.ShopListAdapter;
 import com.example.motty.mapinandroid.model.ApiShops;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +40,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     final ArrayList<ApiShops> companies = new ArrayList<>();
 
-    //pullToRefresh
-    protected PullToRefreshListView listView;
+    protected ListView listView;
 
     private ApiShops apiShops;
 
@@ -78,30 +76,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         this.getApplication().startService(serviceStart);
         this.getApplication().bindService(serviceStart, serviceConnection, Context.BIND_AUTO_CREATE);
 
-        //pullToRefresh
-        listView = (PullToRefreshListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
 
         refreshAdapter = new ShopListAdapter(this.getApplicationContext());
 
         listView.setAdapter(refreshAdapter);
         listView.setOnItemClickListener(this);
         getShopData();
-    }
-
-    // リスト更新
-    private class LoadTask extends AsyncTask<Void, Void, String[]> {
-        @Override
-        protected String[] doInBackground(Void... params) {
-            // データ取得処理
-            return new String[0];
-        }
-
-        @Override
-        protected void onPostExecute(String[] strings) {
-            Log.d("onPostExecute", "更新完了");
-            listView.onRefreshComplete();
-            super.onPostExecute(strings);
-        }
     }
 
     //　位置情報実装

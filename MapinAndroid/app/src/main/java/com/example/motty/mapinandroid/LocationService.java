@@ -1,15 +1,16 @@
 package com.example.motty.mapinandroid;
 
 
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,8 +25,7 @@ import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
-
-public class LocationService extends Service implements LocationListener{
+public class LocationService extends Service implements LocationListener, GpsStatus.Listener {
     public static final String LOG_TAG = LocationService.class.getSimpleName();
 
     private final LocationServiceBinder binder = new LocationServiceBinder();
@@ -36,6 +36,7 @@ public class LocationService extends Service implements LocationListener{
     private NotificationManager mManager;
     private int number = 0;
 
+
     public LocationService() {
 
     }
@@ -45,8 +46,9 @@ public class LocationService extends Service implements LocationListener{
         isLocationManagerUpdatingLocation = false;
         locationList = new ArrayList<>();
         isLogging = false;
-
     }
+
+
 
     @Override
     public int onStartCommand(Intent i, int flags, int startId) {
@@ -143,6 +145,8 @@ public class LocationService extends Service implements LocationListener{
         //Broadcast location provider status change here
     }
 
+
+
     public void startUpdatingLocation() {
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -165,6 +169,9 @@ public class LocationService extends Service implements LocationListener{
 
             Integer gpsFreqInMillis = 10000;
             Integer gpsFreqInDistance = 50;  // in meters
+
+            locationManager.addGpsStatusListener(this);
+
             locationManager.requestLocationUpdates(gpsFreqInMillis, gpsFreqInDistance, criteria, this, null);
 
         } catch (IllegalArgumentException e) {
@@ -213,32 +220,22 @@ public class LocationService extends Service implements LocationListener{
 
     }
 
+    Intent intent = new Intent("MainActivity");
 
     @Override
     public void onLocationChanged(final Location newLocation) {
         /*位置情報を受け取った際の処理*/
-
-//        Log.d(TAG, "(" + newLocation.getLatitude() + "," + newLocation.getLongitude() + ")");
+        Log.d(TAG, "(" + newLocation.getLatitude() + "," + newLocation.getLongitude() + ")");
 
         double latitude = newLocation.getLatitude();
         double longitude = newLocation.getLongitude();
 
-        Log.d(TAG, "(" + latitude + "," + longitude + ")");
+        intent.putExtra("Latitude", latitude);
+        intent.putExtra("Longitude", longitude);
 
-        Intent intentMain = new Intent("MainActivity");
-        intentMain.putExtra("latitude", latitude);
-        intentMain.putExtra("longitude", longitude);
         //Toast.makeText(this, newLocation.getLatitude() + "," + newLocation.getLongitude(), Toast.LENGTH_SHORT).show();
         sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
 
     }
-
-    public boolean checkLocationPermission(){
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = this.checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
-    }
-
-
 
 }
