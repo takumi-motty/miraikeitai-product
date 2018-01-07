@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.motty.mapinandroid.adapter.ShopListAdapter;
 import com.example.motty.mapinandroid.model.ApiShops;
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private ApiShops apiShops;
 
+    // 許可されたパーミッションの種類を識別する番号
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
+
     //位置情報のサービス
     public LocationService locationService;
 
@@ -64,6 +68,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayUseLogoEnabled(true);
             actionBar.setLogo(R.drawable.splash);
+        }
+
+        // Android 6.0以上の場合
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            // 位置情報の取得が許可されているかチェック
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                // 権限があればLocationManagerを取得
+                Toast.makeText(MainActivity.this, "位置情報の取得が許可されています", Toast.LENGTH_SHORT).show();
+//                initLocationManger();
+            } else {
+                // なければ権限を求めるダイアログを表示
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            // Android 6.0以下の場合
+        } else {
+            // インストール時点で許可されているのでチェックの必要なし
+            Toast.makeText(MainActivity.this, "位置情報の取得は既に許可されています(Android 5.0以下です)", Toast.LENGTH_SHORT).show();
         }
 
         // EditTextで自動的にキーボードが出るのを防ぐ処理
@@ -111,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         Intent intent = new Intent(this.getApplicationContext(), CompanyInformationActivity.class);
 
-        position = position-1;
+        //position = position-1;
 //        intent.putParcelableArrayListExtra("ShopsInfo", listShops);
         intent.putExtra("CompanyName", listShops.get(position).getCompanyName());
         intent.putExtra("ShopName", listShops.get(position).getName());
@@ -166,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }else{
                 Log.e("GPS", "Can't get last location.");
             }
-
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://ec2-54-199-196-68.ap-northeast-1.compute.amazonaws.com/")

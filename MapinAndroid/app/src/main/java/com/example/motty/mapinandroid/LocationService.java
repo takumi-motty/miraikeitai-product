@@ -206,9 +206,9 @@ public class LocationService extends Service implements LocationListener, GpsSta
         Notification notification = new NotificationCompat.Builder(this)
                 .setAutoCancel(true)
                 .setContentTitle("まっぴん")//タイトル
-                .setContentText("緯度"+a+",経度"+b)//テキスト
+                .setContentText("ファイルリストが更新されました")//テキスト
                 .setTicker("ticker text")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.icon)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.fun))
                 .setContentIntent(pi)
                 .build();
