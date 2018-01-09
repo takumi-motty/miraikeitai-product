@@ -198,7 +198,7 @@ public class LocationService extends Service implements LocationListener, GpsSta
                 .setContentTitle("まっぴん")//タイトル
                 .setContentText("ファイルリストが更新されました")//テキスト
                 .setTicker("ticker text")
-                .setSmallIcon(R.drawable.icon)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.fun))
                 .setContentIntent(pi)
                 .build();
