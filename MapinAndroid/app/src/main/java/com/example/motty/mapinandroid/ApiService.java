@@ -16,8 +16,8 @@ public interface ApiService {
     @GET("api/shops/{id}.json")
     Call<ApiShops> getApiShops(@Path("id") int shopId);
 
-    @GET("api/shops.json")
-    Call<List<ApiShops>> getApiShopsList();
+    @GET("api/files/{id}.json")
+    Call<ShopFile> getFiles(@Path("id") int shopId);
 
     @GET("api/shops")
     Call<List<ApiShops>> getApiShopsListLocation(@Query(value = "latitude", encoded = true) double latitude, @Query(value = "longitude", encoded = true) double longitude);
@@ -26,12 +26,10 @@ public interface ApiService {
     Call<ShopFile> getApiShopFile(@Path("id") int shopId, @Path("fileId") int fileId);
 
     //id番目のshopの持ってるfileの一覧をjsonで取得
-    @GET("/api/shops/{id}/files.json")
+    @GET("/api/shops/files/{shopId}.json")
     Call<List<ShopFile>> getApiFilesList(@Path("id") int shopId);
 
-
-
-
-
+    @GET("api/files")
+    Call<List<ShopFile>> getFilesListLocation(@Query(value = "latitude", encoded = true) double latitude, @Query(value = "longitude", encoded = true) double longitude);
 
 }
