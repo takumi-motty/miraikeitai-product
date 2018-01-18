@@ -158,13 +158,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return true;
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        listShops.clear();
-//        getShopData();
-//    }
-
     //店舗情報単体を取得
         private void getShopData() {
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -202,9 +195,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 @Override
                 public void onResponse(Call<ApiShops> call, Response<ApiShops> response) {
                     apiShops = response.body();
-//                    companies.addAll(mapinResponse.getApiShopses());
-//                    Log.d("MainActivity", apiShops.toString());
-//                    Log.d("MainActivity", String.valueOf(latitude));
                 }
                 @Override
                 public void onFailure(Call<ApiShops> call, Throwable t) {
@@ -212,8 +202,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             });
 
-//        店舗情報のリストを取得
-//            Call<List<ApiShops>> apiShopsListCall = service.getApiShopsList();
             Call<List<ApiShops>> apiShopsListCall = service.getApiShopsListLocation(mLatitude, mLongitude);
             apiShopsListCall.enqueue(new Callback<List<ApiShops>>() {
                 @Override

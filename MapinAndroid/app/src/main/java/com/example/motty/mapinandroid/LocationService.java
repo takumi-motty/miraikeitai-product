@@ -65,7 +65,6 @@ public class LocationService extends Service implements LocationListener, GpsSta
 
     private ShopFile shopFiles;
 
-
     public LocationService() {
 
     }
@@ -164,8 +163,6 @@ public class LocationService extends Service implements LocationListener, GpsSta
         //Broadcast location provider status change here
     }
 
-
-
     public void startUpdatingLocation() {
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -225,7 +222,7 @@ public class LocationService extends Service implements LocationListener, GpsSta
         Notification notification = new NotificationCompat.Builder(this)
                 .setAutoCancel(true)
                 .setContentTitle("まっぴん")//タイトル
-                .setContentText("ファイルリストが更新されました")//テキスト
+                .setContentText("閲覧可能なファイルがあります。")//テキスト
                 .setTicker("ticker text")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.fun))
@@ -252,17 +249,11 @@ public class LocationService extends Service implements LocationListener, GpsSta
         intent.putExtra("Latitude", latitude);
         intent.putExtra("Longitude", longitude);
 
-        //Toast.makeText(this, newLocation.getLatitude() + "," + newLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-//        sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
-
         if(getFiles() == true){
             sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
         }else{
 
         }
-
-
-
     }
 
     //店舗情報単体を取得
@@ -302,9 +293,6 @@ public class LocationService extends Service implements LocationListener, GpsSta
             @Override
             public void onResponse(Call<ShopFile> call, Response<ShopFile> response) {
                 shopFiles = response.body();
-//                    companies.addAll(mapinResponse.getApiShopses());
-//                    Log.d("MainActivity", apiShops.toString());
-//                    Log.d("MainActivity", String.valueOf(latitude));
             }
             @Override
             public void onFailure(Call<ShopFile> call, Throwable t) {
@@ -313,7 +301,6 @@ public class LocationService extends Service implements LocationListener, GpsSta
         });
 
 //        店舗情報のリストを取得
-//            Call<List<ApiShops>> apiShopsListCall = service.getApiShopsList();
         Call<List<ShopFile>> fileListCall = service.getFilesListLocation(mLatitude, mLongitude);
         fileListCall.enqueue(new Callback<List<ShopFile>>() {
             @Override
