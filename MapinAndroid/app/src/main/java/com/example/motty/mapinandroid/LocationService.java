@@ -253,16 +253,20 @@ public class LocationService extends Service implements LocationListener, GpsSta
         intent.putExtra("Longitude", longitude);
 
         //Toast.makeText(this, newLocation.getLatitude() + "," + newLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-        sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
+//        sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
 
-        getFiles();
+        if(getFiles() == true){
+            sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
+        }else{
 
-        
+        }
+
+
 
     }
 
     //店舗情報単体を取得
-    private void getFiles() {
+    private boolean getFiles() {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -272,7 +276,7 @@ public class LocationService extends Service implements LocationListener, GpsSta
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
+//            return;
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
@@ -321,6 +325,12 @@ public class LocationService extends Service implements LocationListener, GpsSta
             public void onFailure(Call<List<ShopFile>> call, Throwable t) {
             }
         });
+
+        if(listFiles == null){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 }
