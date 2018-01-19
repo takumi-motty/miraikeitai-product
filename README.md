@@ -1,8 +1,8 @@
 # Mapin-Androidだよ
 
-# *困ったら妖精さんに頼もう！！！！*
+# *困ったら他にメンバーに頼ろう！！！！*
 
-# バックログとか
+# バックログ、仕様書等
 ## バックログ
 - [プロダクトバックログ](https://docs.google.com/spreadsheets/d/1N2NLJQ-O9tmwrz5zumvrI5vFCOCNWf2b2CWuCpNkF7U/edit#gid=1643308383)<br>
 - [スプリントバックログ](https://docs.google.com/spreadsheets/d/1EyZnTRZFhpqNglTW6mhJlR3g-gSvZZjaVKp0m6CPwfU/edit#gid=0)
@@ -13,6 +13,3 @@
 # 開発ルール
 1. Branch：担当者名/#Issue番号-追加機能について一言説明 （なるべく英語で）<br>
 例. fujimoto/#1-UI<br>
-
-
-※まっぴんiOS様を参考にしました
