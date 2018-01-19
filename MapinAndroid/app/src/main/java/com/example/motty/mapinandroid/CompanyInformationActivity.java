@@ -33,7 +33,6 @@ import static com.example.motty.mapinandroid.R.id.selected_photo;
 //ファイル情報画面&企業情報画面
 public class CompanyInformationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-//    private ArrayList<String> item_list;
     final private ArrayList<ShopFile> listFiles = new ArrayList<>();
 
     private FileListAdapter fileListAdapter;
@@ -248,9 +247,4 @@ public class CompanyInformationActivity extends AppCompatActivity implements Ada
         fileListAdapter.setFileData(listFiles);
         fileListAdapter.notifyDataSetChanged();
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        getFileData();
-//    }
 }

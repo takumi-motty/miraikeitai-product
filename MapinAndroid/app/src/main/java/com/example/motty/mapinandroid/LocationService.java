@@ -1,6 +1,8 @@
 package com.example.motty.mapinandroid;
 
 
+
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,15 +20,25 @@ import android.location.LocationProvider;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.motty.mapinandroid.model.ApiShops;
+import com.example.motty.mapinandroid.model.ShopFile;
+
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.ContentValues.TAG;
 
-
-public class LocationService extends Service implements LocationListener{
+public class LocationService extends Service implements LocationListener, GpsStatus.Listener {
     public static final String LOG_TAG = LocationService.class.getSimpleName();
 
     private final LocationServiceBinder binder = new LocationServiceBinder();
@@ -36,6 +49,22 @@ public class LocationService extends Service implements LocationListener{
     private NotificationManager mManager;
     private int number = 0;
 
+    //位置情報のサービス
+    public LocationService locationService;
+
+    private double mLatitude;
+    private double mLongitude;
+
+    final private ArrayList<ApiShops> listShops = new ArrayList<>();
+
+    final private ArrayList<ShopFile> listFiles = new ArrayList<>();
+
+    private LocationManager locationManager = null;
+
+    private ApiShops apiShops;
+
+    private ShopFile shopFiles;
+
     public LocationService() {
 
     }
@@ -45,7 +74,6 @@ public class LocationService extends Service implements LocationListener{
         isLocationManagerUpdatingLocation = false;
         locationList = new ArrayList<>();
         isLogging = false;
-
     }
 
     @Override
@@ -77,12 +105,9 @@ public class LocationService extends Service implements LocationListener{
     @Override
     public void onDestroy() {
         Log.d(LOG_TAG, "onDestroy ");
-
-
     }
 
 
-    //This is where we detect the app is being killed, thus stop service.
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.d(LOG_TAG, "onTaskRemoved ");
@@ -95,16 +120,11 @@ public class LocationService extends Service implements LocationListener{
         stopSelf();
     }
 
-
-
-
     public class LocationServiceBinder extends Binder {
         public LocationService getService() {
             return LocationService.this;
         }
     }
-
-
 
     /* LocationListener implemenation */
     @Override
@@ -165,6 +185,9 @@ public class LocationService extends Service implements LocationListener{
 
             Integer gpsFreqInMillis = 10000;
             Integer gpsFreqInDistance = 50;  // in meters
+
+            locationManager.addGpsStatusListener(this);
+
             locationManager.requestLocationUpdates(gpsFreqInMillis, gpsFreqInDistance, criteria, this, null);
 
         } catch (IllegalArgumentException e) {
@@ -199,7 +222,7 @@ public class LocationService extends Service implements LocationListener{
         Notification notification = new NotificationCompat.Builder(this)
                 .setAutoCancel(true)
                 .setContentTitle("まっぴん")//タイトル
-                .setContentText("緯度"+a+",経度"+b)//テキスト
+                .setContentText("閲覧可能なファイルがあります。")//テキスト
                 .setTicker("ticker text")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.fun))
@@ -213,32 +236,88 @@ public class LocationService extends Service implements LocationListener{
 
     }
 
+    Intent intent = new Intent("MainActivity");
 
     @Override
     public void onLocationChanged(final Location newLocation) {
         /*位置情報を受け取った際の処理*/
-
-//        Log.d(TAG, "(" + newLocation.getLatitude() + "," + newLocation.getLongitude() + ")");
+        Log.d(TAG, "(" + newLocation.getLatitude() + "," + newLocation.getLongitude() + ")");
 
         double latitude = newLocation.getLatitude();
         double longitude = newLocation.getLongitude();
 
-        Log.d(TAG, "(" + latitude + "," + longitude + ")");
+        intent.putExtra("Latitude", latitude);
+        intent.putExtra("Longitude", longitude);
 
-        Intent intentMain = new Intent("MainActivity");
-        intentMain.putExtra("latitude", latitude);
-        intentMain.putExtra("longitude", longitude);
-        //Toast.makeText(this, newLocation.getLatitude() + "," + newLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-        sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
+        if(getFiles() == true){
+            sendNotification(newLocation.getLatitude(),newLocation.getLongitude());
+        }else{
 
+        }
     }
 
-    public boolean checkLocationPermission(){
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = this.checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
+    //店舗情報単体を取得
+    private boolean getFiles() {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+//            return;
+        }
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if (location != null) {
+            mLatitude = location.getLatitude();
+            mLongitude = location.getLongitude();
+
+            Log.d("LocationService", String.valueOf(mLatitude) + "," + String.valueOf(mLongitude));
+
+        }else{
+            Log.e("GPS", "Can't get last location.");
+        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://ec2-54-199-196-68.ap-northeast-1.compute.amazonaws.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService service = retrofit.create(ApiService.class);
+        Call<ShopFile> filesCall = service.getFiles(6);
+
+        filesCall.enqueue(new Callback<ShopFile>() {
+            @Override
+            public void onResponse(Call<ShopFile> call, Response<ShopFile> response) {
+                shopFiles = response.body();
+            }
+            @Override
+            public void onFailure(Call<ShopFile> call, Throwable t) {
+                Log.d("LocationService", t.getMessage());
+            }
+        });
+
+//        店舗情報のリストを取得
+        Call<List<ShopFile>> fileListCall = service.getFilesListLocation(mLatitude, mLongitude);
+        fileListCall.enqueue(new Callback<List<ShopFile>>() {
+            @Override
+            public void onResponse(Call<List<ShopFile>> call, Response<List<ShopFile>> response) {
+                listFiles.addAll(response.body());
+                Log.d("LocationService", listFiles.toString());
+            }
+            @Override
+            public void onFailure(Call<List<ShopFile>> call, Throwable t) {
+            }
+        });
+
+        if(listFiles == null){
+            return false;
+        }else{
+            return true;
+        }
     }
-
-
 
 }
